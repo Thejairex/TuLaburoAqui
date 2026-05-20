@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "skills": {
+    "animated-component-libraries": {
+      "source": "freshtechbro/claudedesignskills",
+      "sourceType": "github",
+      "skillPath": ".claude/skills/animated-component-libraries/SKILL.md",
+      "computedHash": "d3b545d0de1747e76f71fe165cfc3428d2f1b17cff6fc9c4ce744bbe2ff36fd8"
+    },
+    "laravel-specialist": {
+      "source": "jeffallan/claude-skills",
+      "sourceType": "github",
+      "skillPath": "skills/laravel-specialist/SKILL.md",
+      "computedHash": "805be17bd59f759e2f2f2dcbd6bd205ca6678420a87b21da1c16e0793093615c"
+    },
+    "laravel:controller-tests": {
+      "source": "jpcaparas/superpowers-laravel",
+      "sourceType": "github",
+      "skillPath": "skills/controller-tests/SKILL.md",
+      "computedHash": "34dc7b299ca21573a647e91c9584753a977f9bcfbc873b0048d7cba7b96e70a5"
+    },
+    "laravel:queues-and-horizon": {
+      "source": "jpcaparas/superpowers-laravel",
+      "sourceType": "github",
+      "skillPath": "skills/queues-and-horizon/SKILL.md",
+      "computedHash": "b45d98262bd3d7b584e95c2ab94387dc666d142973baee9027b55eaacf004604"
+    },
+    "laravel:rate-limiting": {
+      "source": "jpcaparas/superpowers-laravel",
+      "sourceType": "github",
+      "skillPath": "skills/rate-limiting-and-throttle/SKILL.md",
+      "computedHash": "b777ea32447d8e496a21b4401837fe1b2002a2bc0c3de43bedab4d242adf1ee4"
+    },
+    "laravel:tdd-with-pest": {
+      "source": "jpcaparas/superpowers-laravel",
+      "sourceType": "github",
+      "skillPath": "skills/tdd-with-pest/SKILL.md",
+      "computedHash": "474923c590d62688b3244492bdfe9c14b8f5ded7e1cb09913fecced089f3c3aa"
+    },
+    "tailwindcss": {
+      "source": "mindrally/skills",
+      "sourceType": "github",
+      "skillPath": "tailwindcss/SKILL.md",
+      "computedHash": "1715717d38abba1c4b11f2e95a94681cdb1dddbcb28379637b591a16b50bcd4d"
+    },
+    "ui-design": {
+      "source": "shajith003/awesome-claude-skills",
+      "sourceType": "github",
+      "skillPath": "ui-design/SKILL.md",
+      "computedHash": "44b4e7f6fe923ac179a556feeea1feecf10227fceca0fc890abf921895d6a665"
+    }
+  }
+}
