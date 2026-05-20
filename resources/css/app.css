@@ -10,6 +10,34 @@
 
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-hanken: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+    /* LaborMarket Design System */
+    --color-lm-surface: #f8f9fb;
+    --color-lm-surface-dim: #d9dadc;
+    --color-lm-surface-bright: #f8f9fb;
+    --color-lm-surface-lowest: #ffffff;
+    --color-lm-surface-low: #f3f4f6;
+    --color-lm-surface-container: #edeef0;
+    --color-lm-surface-high: #e7e8ea;
+    --color-lm-surface-highest: #e1e2e4;
+    --color-lm-on-surface: #191c1e;
+    --color-lm-on-surface-variant: #434654;
+    --color-lm-outline: #737685;
+    --color-lm-outline-variant: #c3c6d6;
+    --color-lm-primary: #003d9b;
+    --color-lm-primary-container: #0052cc;
+    --color-lm-primary-fixed: #dae2ff;
+    --color-lm-primary-fixed-dim: #b2c5ff;
+    --color-lm-on-primary: #ffffff;
+    --color-lm-on-primary-container: #c4d2ff;
+    --color-lm-secondary: #526069;
+    --color-lm-secondary-container: #d3e2ed;
+    --color-lm-secondary-fixed: #d6e5ef;
+    --color-lm-on-secondary: #ffffff;
+    --color-lm-on-secondary-fixed-variant: #3b4951;
+    --color-lm-tertiary-fixed: #d7e2ff;
+    --color-lm-on-tertiary-fixed-variant: #004590;
 
     --color-zinc-50: #fafafa;
     --color-zinc-100: #f5f5f5;

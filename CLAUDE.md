@@ -93,6 +93,15 @@ Configurado en `FortifyServiceProvider`:
 - Two-Factor: 5 intentos/min por sesión
 - Passkeys: 10 intentos/min por credential+IP
 
+## Diseño UI (Stitch)
+
+El proyecto de diseño de referencia es **LaborMarket** en Stitch:
+- ID: `projects/1055399330902105321`
+- Tema: "Operational Professional" · Fuente: Hanken Grotesk · Modo claro
+- Color primario: `#0052cc` · Esquinas: 8px · Espaciado base: 8px
+
+Siempre usar este proyecto como referencia al generar pantallas, componentes o diseños con Stitch MCP. Aplicar el design system de LaborMarket por defecto sin necesidad de que el usuario lo indique.
+
 ## Reglas de desarrollo
 - Usar Livewire para toda interacción reactiva antes de considerar JS puro
 - Los componentes Livewire van en `app/Livewire/` organizados por módulo

@@ -4,7 +4,10 @@ namespace App\Actions\Fortify;
 
 use App\Concerns\PasswordValidationRules;
 use App\Concerns\ProfileValidationRules;
+use App\Models\Company;
+use App\Models\CompanyMember;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 
@@ -12,22 +15,51 @@ class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules, ProfileValidationRules;
 
-    /**
-     * Validate and create a newly registered user.
-     *
-     * @param  array<string, string>  $input
-     */
     public function create(array $input): User
     {
-        Validator::make($input, [
+        $role = $input['role'] ?? 'candidate';
+
+        $rules = [
             ...$this->profileRules(),
             'password' => $this->passwordRules(),
-        ])->validate();
+            'role' => ['required', 'in:candidate,employer'],
+        ];
 
-        return User::create([
-            'name' => $input['name'],
-            'email' => $input['email'],
-            'password' => $input['password'],
-        ]);
+        if ($role === 'employer') {
+            $rules['company_legal_name'] = ['required', 'string', 'max:255'];
+            $rules['company_display_name'] = ['nullable', 'string', 'max:255'];
+            $rules['company_industry'] = ['nullable', 'string', 'max:100'];
+            $rules['company_size'] = ['nullable', 'string', 'max:50'];
+        }
+
+        Validator::make($input, $rules)->validate();
+
+        return DB::transaction(function () use ($input, $role) {
+            $user = User::create([
+                'name'     => $input['name'],
+                'email'    => $input['email'],
+                'password' => $input['password'],
+                'role'     => $role,
+            ]);
+
+            if ($role === 'employer') {
+                $company = Company::create([
+                    'legal_name'    => $input['company_legal_name'],
+                    'display_name'  => $input['company_display_name'] ?? null,
+                    'industry'      => $input['company_industry'] ?? null,
+                    'company_size'  => $input['company_size'] ?? null,
+                    'email'         => $input['email'],
+                ]);
+
+                CompanyMember::create([
+                    'company_id' => $company->id,
+                    'user_id'    => $user->id,
+                    'role'       => 'admin',
+                    'is_owner'   => true,
+                ]);
+            }
+
+            return $user;
+        });
     }
 }

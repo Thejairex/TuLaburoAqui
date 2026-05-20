@@ -15,7 +15,8 @@
         "laravel/framework": "^13.7",
         "laravel/tinker": "^3.0",
         "livewire/flux": "*",
-        "livewire/livewire": "^4.1"
+        "livewire/livewire": "^4.1",
+        "spatie/laravel-medialibrary": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.24",
