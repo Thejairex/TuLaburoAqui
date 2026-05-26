@@ -7,6 +7,7 @@ use App\Concerns\ProfileValidationRules;
 use App\Models\Company;
 use App\Models\CompanyMember;
 use App\Models\User;
+use App\Models\WorkerProfile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -41,6 +42,10 @@ class CreateNewUser implements CreatesNewUsers
                 'password' => $input['password'],
                 'role'     => $role,
             ]);
+
+            if ($role === 'candidate') {
+                WorkerProfile::create(['user_id' => $user->id]);
+            }
 
             if ($role === 'employer') {
                 $company = Company::create([

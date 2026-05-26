@@ -15,6 +15,12 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard.*')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+
+                    @if(auth()->user()->role === 'candidate')
+                        <flux:sidebar.item icon="user" :href="route('profile.edit.candidate')" :current="request()->routeIs('profile.edit.candidate')" wire:navigate>
+                            {{ __('Mi perfil') }}
+                        </flux:sidebar.item>
+                    @endif
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

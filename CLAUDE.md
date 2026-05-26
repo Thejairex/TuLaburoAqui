@@ -135,6 +135,14 @@ Próximos pasos según roadmap: perfiles visuales de candidato y empresa, subida
 
 Estrategia adoptada: **registro corto + onboarding progresivo en dashboard** (teléfono, país, ciudad y datos adicionales se completan en esta fase).
 
+## Manejo de archivos
+
+Todos los archivos (CV, avatar, logo de empresa) se manejan con **Spatie MediaLibrary** (`spatie/laravel-medialibrary`), ya instalada en el proyecto.
+
+- Los modelos que suben archivos deben usar el trait `InteractsWithMedia` e implementar `HasMedia`
+- Colecciones definidas: `avatar` (usuarios), `cv` (candidatos), `company_logo` (empresas)
+- No usar `Storage` facade directamente para estos archivos — usar siempre la API de MediaLibrary
+
 ## Reglas de desarrollo
 - Usar Livewire para toda interacción reactiva antes de considerar JS puro
 - Los componentes Livewire van en `app/Livewire/` organizados por módulo

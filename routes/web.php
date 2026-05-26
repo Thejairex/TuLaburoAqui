@@ -14,6 +14,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::view('dashboard/candidate', 'dashboard.candidate')->name('dashboard.candidate');
     Route::view('dashboard/employer', 'dashboard.employer')->name('dashboard.employer');
+
+    Route::livewire('profile/edit', \App\Livewire\Profile\Edit::class)
+        ->middleware('role:candidate')
+        ->name('profile.edit.candidate');
 });
 
 require __DIR__.'/settings.php';
