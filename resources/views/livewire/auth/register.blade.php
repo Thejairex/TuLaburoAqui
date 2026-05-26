@@ -270,74 +270,23 @@
                 {{-- Sección: datos de la empresa --}}
                 <div class="pt-1">
                     <p class="text-xs font-semibold tracking-wider uppercase mb-4" style="color: #737685;">
-                        Datos de la empresa
+                        Tu empresa
                     </p>
-                    <div class="space-y-4">
-                        <div>
-                            <label for="company_legal_name" class="block text-sm font-bold mb-1" style="color: #191c1e;">Razón social</label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg" style="color: #737685;">business</span>
-                                <input id="company_legal_name" name="company_legal_name" type="text"
-                                       value="{{ old('company_legal_name') }}"
-                                       required
-                                       placeholder="Nombre legal de la empresa"
-                                       class="w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition-colors"
-                                       style="border-color: {{ $errors->has('company_legal_name') ? '#ba1a1a' : '#c3c6d6' }}; background-color: #ffffff; color: #191c1e;">
-                            </div>
-                            @error('company_legal_name') <p class="mt-1 text-xs font-semibold" style="color: #ba1a1a;">{{ $message }}</p> @enderror
+                    <div>
+                        <label for="company_legal_name" class="block text-sm font-bold mb-1" style="color: #191c1e;">Nombre de la empresa</label>
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg" style="color: #737685;">business</span>
+                            <input id="company_legal_name" name="company_legal_name" type="text"
+                                   value="{{ old('company_legal_name') }}"
+                                   required
+                                   placeholder="Nombre legal o comercial"
+                                   class="w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition-colors"
+                                   style="border-color: {{ $errors->has('company_legal_name') ? '#ba1a1a' : '#c3c6d6' }}; background-color: #ffffff; color: #191c1e;">
                         </div>
-
-                        <div>
-                            <label for="company_display_name" class="block text-sm font-bold mb-1" style="color: #191c1e;">
-                                Nombre comercial <span class="font-normal" style="color: #737685;">(opcional)</span>
-                            </label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg" style="color: #737685;">storefront</span>
-                                <input id="company_display_name" name="company_display_name" type="text"
-                                       value="{{ old('company_display_name') }}"
-                                       placeholder="Nombre que verán los candidatos"
-                                       class="w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition-colors"
-                                       style="border-color: #c3c6d6; background-color: #ffffff; color: #191c1e;">
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="company_industry" class="block text-sm font-bold mb-1" style="color: #191c1e;">Industria / Sector</label>
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg" style="color: #737685;">category</span>
-                                    <select id="company_industry" name="company_industry"
-                                            class="w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition-colors appearance-none"
-                                            style="border-color: #c3c6d6; background-color: #ffffff; color: #191c1e;">
-                                        <option value="">Seleccioná un sector</option>
-                                        <option value="logistics" {{ old('company_industry') === 'logistics' ? 'selected' : '' }}>Logística y Transporte</option>
-                                        <option value="retail" {{ old('company_industry') === 'retail' ? 'selected' : '' }}>Retail y Comercio</option>
-                                        <option value="construction" {{ old('company_industry') === 'construction' ? 'selected' : '' }}>Construcción</option>
-                                        <option value="manufacturing" {{ old('company_industry') === 'manufacturing' ? 'selected' : '' }}>Manufactura</option>
-                                        <option value="hospitality" {{ old('company_industry') === 'hospitality' ? 'selected' : '' }}>Hospitalidad y Turismo</option>
-                                        <option value="cleaning" {{ old('company_industry') === 'cleaning' ? 'selected' : '' }}>Limpieza y Mantenimiento</option>
-                                        <option value="security" {{ old('company_industry') === 'security' ? 'selected' : '' }}>Seguridad</option>
-                                        <option value="other" {{ old('company_industry') === 'other' ? 'selected' : '' }}>Otro</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div>
-                                <label for="company_size" class="block text-sm font-bold mb-1" style="color: #191c1e;">Tamaño de la empresa</label>
-                                <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg" style="color: #737685;">groups</span>
-                                    <select id="company_size" name="company_size"
-                                            class="w-full pl-10 pr-4 py-3 rounded-lg border text-sm focus:outline-none focus:ring-2 transition-colors appearance-none"
-                                            style="border-color: #c3c6d6; background-color: #ffffff; color: #191c1e;">
-                                        <option value="">Cantidad de empleados</option>
-                                        <option value="1-10" {{ old('company_size') === '1-10' ? 'selected' : '' }}>1 – 10 empleados</option>
-                                        <option value="11-50" {{ old('company_size') === '11-50' ? 'selected' : '' }}>11 – 50 empleados</option>
-                                        <option value="51-200" {{ old('company_size') === '51-200' ? 'selected' : '' }}>51 – 200 empleados</option>
-                                        <option value="201-500" {{ old('company_size') === '201-500' ? 'selected' : '' }}>201 – 500 empleados</option>
-                                        <option value="500+" {{ old('company_size') === '500+' ? 'selected' : '' }}>Más de 500 empleados</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                        @error('company_legal_name') <p class="mt-1 text-xs font-semibold" style="color: #ba1a1a;">{{ $message }}</p> @enderror
+                        <p class="mt-1 text-xs" style="color: #737685;">
+                            Podés completar el perfil de la empresa desde el dashboard después de registrarte.
+                        </p>
                     </div>
                 </div>
 

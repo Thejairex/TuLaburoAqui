@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('job_posts', function (Blueprint $table) {
-            $table->uuid()->primary();
+            $table->uuid('id')->primary();
             $table->foreignUuid('company_id')->constrained()->onDelete('cascade');
             $table->foreignUuid('created_by_user_id')->constrained('users')->onDelete('set null');
             $table->string('title');

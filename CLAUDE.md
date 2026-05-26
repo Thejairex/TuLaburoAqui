@@ -20,13 +20,26 @@ composer run lint:check   # Verifica formato sin corregir
 # Tests
 composer run test         # Lint check + suite completa de Pest
 composer run ci:check     # Igual que test (usado en CI/CD)
-./vendor/bin/pest tests/Feature/Auth/LoginTest.php  # Ejecutar un test específico
-./vendor/bin/pest --filter "can login"              # Ejecutar por nombre de test
+C:\php\8.4\php.exe vendor/bin/pest tests/Feature/Auth/LoginTest.php  # Ejecutar un test específico
+C:\php\8.4\php.exe vendor/bin/pest --filter "can login"              # Ejecutar por nombre de test
 ```
+
+## Entorno PHP
+
+**PHP 8.4** — usar siempre el ejecutable en `C:\php\8.4\php.exe` para todos los comandos PHP.
+
+Ejemplos:
+```powershell
+C:\php\8.4\php.exe artisan migrate
+C:\php\8.4\php.exe artisan test
+C:\php\8.4\php.exe vendor/bin/pest
+```
+
+> IMPORTANTE: nunca usar `php` a secas en PowerShell desde este proyecto; usar siempre la ruta completa `C:\php\8.4\php.exe`.
 
 ## Stack tecnológico
 
-- **Laravel 13** + **PHP 8.3**
+- **Laravel 13** + **PHP 8.4**
 - **Livewire 4** para componentes reactivos
 - **Laravel Fortify** para autenticación (2FA, passkeys, verificación de email)
 - **Tailwind CSS 4** con Vite
@@ -101,6 +114,26 @@ El proyecto de diseño de referencia es **LaborMarket** en Stitch:
 - Color primario: `#0052cc` · Esquinas: 8px · Espaciado base: 8px
 
 Siempre usar este proyecto como referencia al generar pantallas, componentes o diseños con Stitch MCP. Aplicar el design system de LaborMarket por defecto sin necesidad de que el usuario lo indique.
+
+## Roadmap MVP
+
+El roadmap completo está en `docs/roadmap-mvp-tulaburoaqui.md`. Siempre consultarlo para entender el contexto, fase actual y criterios de done antes de implementar cualquier funcionalidad nueva.
+
+### Fases
+| Fase | Nombre | Estado |
+|------|--------|--------|
+| 0 | Fundación técnica | ✅ Completa |
+| 1 | Registro y acceso | ✅ Completa |
+| 2 | Perfiles y archivos | ⏳ Pendiente |
+| 3 | Dashboards por rol | ⏳ Pendiente |
+| 4 | Ofertas y búsqueda | ⏳ Pendiente |
+| 5 | Match y mensajería | ⏳ Pendiente |
+| 6 | Calificaciones y administración | ⏳ Pendiente |
+
+### Fase actual: 2 — Perfiles y archivos
+Próximos pasos según roadmap: perfiles visuales de candidato y empresa, subida de CV/foto/logo con S3, habilidades y completitud de perfil.
+
+Estrategia adoptada: **registro corto + onboarding progresivo en dashboard** (teléfono, país, ciudad y datos adicionales se completan en esta fase).
 
 ## Reglas de desarrollo
 - Usar Livewire para toda interacción reactiva antes de considerar JS puro
