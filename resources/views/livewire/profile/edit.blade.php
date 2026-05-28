@@ -187,8 +187,8 @@
             <div class="rounded-xl border p-6 flex flex-col gap-4" style="background-color:#ffffff; border-color:#c3c6d6;">
                 <h2 class="text-base font-semibold" style="color:#191c1e;">Habilidades</h2>
 
-                <div class="flex gap-2">
-                    <select id="skill-selector" class="flex-1 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-700" style="border-color:#c3c6d6; background:#fff; color:#191c1e;">
+                <div class="flex gap-2" x-data="{ skill: '' }">
+                    <select x-model="skill" class="flex-1 rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-700" style="border-color:#c3c6d6; background:#fff; color:#191c1e;">
                         <option value="">Buscar y agregar habilidad...</option>
                         @foreach (collect($availableSkills)->groupBy('category') as $category => $skills)
                             <optgroup label="{{ ucfirst($category) }}">
@@ -199,7 +199,7 @@
                         @endforeach
                     </select>
                     <button type="button"
-                        onclick="const sel = document.getElementById('skill-selector'); if(sel.value) { $wire.addSkill(sel.value); sel.value=''; }"
+                        @click="if (skill) { $wire.addSkill(skill); skill = '' }"
                         class="px-4 py-2 rounded-lg text-sm font-semibold" style="background-color:#003d9b; color:#ffffff;">
                         Agregar
                     </button>

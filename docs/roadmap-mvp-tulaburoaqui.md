@@ -98,7 +98,7 @@ El documento funcional define el perfil visual como un diferencial clave bajo el
 
 - Crear perfil público y editable de trabajador.[cite:1][cite:2]
 - Crear perfil público y editable de empresa.[cite:1][cite:2]
-- Subir avatar, CV PDF y logo usando storage S3 o compatible.[cite:1][cite:2]
+- Subir avatar, CV PDF y logo. [cite:1][cite:2]
 - Manejar habilidades del trabajador y skills asociadas.[cite:2]
 - Calcular completitud de perfil para guiar el onboarding posterior.[cite:2]
 
