@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\WorkerProfileCompleteness;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -40,19 +41,6 @@ class WorkerProfile extends Model implements HasMedia
 
     public function calculateCompleteness(): int
     {
-        $fields = [
-            filled($this->headline),
-            filled($this->bio),
-            filled($this->city),
-            filled($this->available_immediately),
-            filled($this->work_modality),
-            $this->getFirstMedia('cv') !== null,
-            $this->skills()->exists(),
-            $this->user?->getFirstMedia('avatar') !== null,
-        ];
-
-        $filled = \count(array_filter($fields));
-
-        return (int) round(($filled / \count($fields)) * 100);
+        return app(WorkerProfileCompleteness::class)->percentage($this->user);
     }
 }

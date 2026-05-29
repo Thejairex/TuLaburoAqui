@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\CompanyCompleteness;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
@@ -47,19 +48,7 @@ class Company extends Model implements HasMedia
 
     public function calculateCompleteness(): int
     {
-        $fields = [
-            filled($this->display_name ?? $this->legal_name),
-            filled($this->industry),
-            filled($this->company_size),
-            filled($this->description),
-            filled($this->city),
-            filled($this->website),
-            $this->getFirstMedia('company_logo') !== null,
-        ];
-
-        $filled = count(array_filter($fields));
-
-        return (int) round(($filled / count($fields)) * 100);
+        return app(CompanyCompleteness::class)->percentage($this);
     }
 
     public static function generateUniqueSlug(string $name, ?string $excludeId = null): string

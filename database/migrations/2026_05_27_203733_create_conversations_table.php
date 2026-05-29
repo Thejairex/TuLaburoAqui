@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('job_application_id')->constrained('job_applications')->onDelete('cascade');
             $table->string('subject');
-            $table->string('status')->default('open'); # open, closed, archived
+            $table->string('status')->default('open'); // open, closed, archived
             $table->timestamp('last_message_at')->nullable();
             $table->timestamps();
         });

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
+
 #[Fillable(
     [
         'job_post_id',
@@ -15,14 +16,15 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
         'match_score',
         'applied_at',
         'reviewed_at',
-        'hired_at'
+        'hired_at',
     ]
 )]
 class JobApplication extends Model
 {
     use HasUuids;
 
-    protected function casts(){
+    protected function casts()
+    {
         return [
             'applied_at' => 'datetime',
             'reviewed_at' => 'datetime',

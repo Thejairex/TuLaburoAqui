@@ -124,14 +124,16 @@ El roadmap completo está en `docs/roadmap-mvp-tulaburoaqui.md`. Siempre consult
 |------|--------|--------|
 | 0 | Fundación técnica | ✅ Completa |
 | 1 | Registro y acceso | ✅ Completa |
-| 2 | Perfiles y archivos | ⏳ Pendiente |
-| 3 | Dashboards por rol | ⏳ Pendiente |
-| 4 | Ofertas y búsqueda | ⏳ Pendiente |
+| 2 | Perfiles y archivos | ✅ Completa |
+| 3 | Dashboards por rol | ✅ Completa |
+| 4 | Ofertas y búsqueda | ⏳ En curso |
 | 5 | Match y mensajería | ⏳ Pendiente |
 | 6 | Calificaciones y administración | ⏳ Pendiente |
 
-### Fase actual: 2 — Perfiles y archivos
-Próximos pasos según roadmap: perfiles visuales de candidato y empresa, subida de CV/foto/logo con S3, habilidades y completitud de perfil.
+### Fase actual: 4 — Ofertas y búsqueda
+Próximo paso: CRUD de ofertas laborales para empresa (estados draft/published/paused/closed/expired) y buscador con filtros reactivos en Livewire.
+
+Fase 3 cerrada: dashboards de candidato y empresa con progreso de completitud, checklist de acciones pendientes (CTA con deep-link a secciones del editor) y accesos rápidos (edición, carga de archivos, ofertas, postulaciones y mensajería según rol). Lógica de completitud en `WorkerProfileCompleteness` y `CompanyCompleteness` (app/Services).
 
 Estrategia adoptada: **registro corto + onboarding progresivo en dashboard** (teléfono, país, ciudad y datos adicionales se completan en esta fase).
 

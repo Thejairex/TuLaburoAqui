@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Model;
 
 #[Fillable([
     'job_application_id',
@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
     'rating',
     'comment',
     'review_type',
-    'is_visible'
+    'is_visible',
 ])]
 class Review extends Model
 {

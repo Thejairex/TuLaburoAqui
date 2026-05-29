@@ -15,18 +15,28 @@ use Livewire\WithFileUploads;
 #[Title('Perfil de empresa')]
 class Edit extends Component
 {
-    use WithFileUploads, CompanyValidationRules;
+    use CompanyValidationRules, WithFileUploads;
 
     public string $display_name = '';
+
     public string $legal_name = '';
+
     public string $industry = '';
+
     public string $company_size = '';
+
     public string $website = '';
+
     public string $email = '';
+
     public string $phone = '';
+
     public string $city = '';
+
     public string $province = '';
+
     public string $description = '';
+
     public $logo = null;
 
     private ?Company $company = null;
@@ -38,21 +48,22 @@ class Edit extends Component
         if (! $company) {
             session()->flash('error', 'No tenés empresa asociada.');
             $this->redirect(route('dashboard'), navigate: true);
+
             return;
         }
 
         $this->company = $company;
 
-        $this->display_name  = $company->display_name ?? '';
-        $this->legal_name    = $company->legal_name ?? '';
-        $this->industry      = $company->industry ?? '';
-        $this->company_size  = $company->company_size ?? '';
-        $this->website       = $company->website ?? '';
-        $this->email         = $company->email ?? '';
-        $this->phone         = $company->phone ?? '';
-        $this->city          = $company->city ?? '';
-        $this->province      = $company->province ?? '';
-        $this->description   = $company->description ?? '';
+        $this->display_name = $company->display_name ?? '';
+        $this->legal_name = $company->legal_name ?? '';
+        $this->industry = $company->industry ?? '';
+        $this->company_size = $company->company_size ?? '';
+        $this->website = $company->website ?? '';
+        $this->email = $company->email ?? '';
+        $this->phone = $company->phone ?? '';
+        $this->city = $company->city ?? '';
+        $this->province = $company->province ?? '';
+        $this->description = $company->description ?? '';
     }
 
     public function save(): void
@@ -69,15 +80,15 @@ class Edit extends Component
 
         $company->fill([
             'display_name' => $validated['display_name'],
-            'legal_name'   => $validated['legal_name'],
-            'industry'     => $validated['industry'] ?? null,
+            'legal_name' => $validated['legal_name'],
+            'industry' => $validated['industry'] ?? null,
             'company_size' => $validated['company_size'] ?? null,
-            'website'      => $validated['website'] ?? null,
-            'email'        => $validated['email'] ?? null,
-            'phone'        => $validated['phone'] ?? null,
-            'city'         => $validated['city'] ?? null,
-            'province'     => $validated['province'] ?? null,
-            'description'  => $validated['description'] ?? null,
+            'website' => $validated['website'] ?? null,
+            'email' => $validated['email'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'city' => $validated['city'] ?? null,
+            'province' => $validated['province'] ?? null,
+            'description' => $validated['description'] ?? null,
         ]);
 
         if ($nameChanged) {

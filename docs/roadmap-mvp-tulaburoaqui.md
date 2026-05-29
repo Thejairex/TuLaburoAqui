@@ -33,7 +33,7 @@ Esta fase prepara la base del sistema para que el resto del MVP crezca sin retra
 ### Objetivos
 
 - Configurar Docker para desarrollo local y despliegue vía Coolify.[cite:2]
-- Configurar Laravel 13, Livewire, PostgreSQL y filesystem para S3 o compatible.[cite:2]
+- Configurar Laravel 13, Livewire, PostgreSQL y filesystem.[cite:2]
 - Crear migraciones, seeders y factories iniciales.[cite:2]
 - Implementar auth base y separación por rol (`worker`, `company_admin`, `admin`).[cite:2]
 - Dejar políticas, middlewares y estructura de layouts autenticados preparados para fases posteriores.[cite:2]
@@ -117,7 +117,7 @@ El documento funcional define el perfil visual como un diferencial clave bajo el
 - Vista pública de perfil trabajador.[cite:1][cite:2]
 - Vista pública de perfil empresa.[cite:1][cite:2]
 - Componentes Livewire para edición de perfil.[cite:2]
-- Carga y reemplazo de archivos en S3.[cite:2]
+- Carga y reemplazo de archivos.[cite:2]
 
 ### Ajustes sugeridos de BD
 
@@ -269,7 +269,7 @@ La siguiente distribución ayuda a mantener foco funcional por sprint, reduce me
 |---|---|---|---|
 | 1 | 1–2 | Fundación técnica | Infraestructura, auth base, migraciones, seeders y staging.[cite:2] |
 | 2 | 3 | Registro y acceso | Alta por tipo de usuario y autenticación operativa.[cite:1][cite:2] |
-| 3 | 4–5 | Perfiles y archivos | Perfiles visuales y subida de archivos en S3.[cite:1][cite:2] |
+| 3 | 4–5 | Perfiles y archivos | Perfiles visuales y subida de archivos.[cite:1][cite:2] |
 | 4 | 6–7 | Dashboards por rol | Home operativa para trabajador y empresa.[cite:2] |
 | 5 | 8–9 | Ofertas y búsqueda | Publicaciones, listados y filtros reactivos.[cite:1][cite:2] |
 | 6 | 10–11 | Match y mensajería | Postulación, score básico y conversaciones.[cite:1][cite:2] |

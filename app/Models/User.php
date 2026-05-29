@@ -19,10 +19,10 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 #[Fillable(['name', 'email', 'password', 'role', 'status', 'first_name', 'last_name', 'phone', 'last_seen_at'])]
 #[Hidden(['password', 'two_factor_secret', 'two_factor_recovery_codes', 'remember_token', 'last_seen_at', 'role'])]
-class User extends Authenticatable implements PasskeyUser, HasMedia
+class User extends Authenticatable implements HasMedia, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable, HasUuids, InteractsWithMedia;
+    use HasFactory, HasUuids, InteractsWithMedia, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
 
     protected function casts(): array
     {

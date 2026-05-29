@@ -27,7 +27,7 @@
     <form wire:submit="save" class="flex flex-col gap-6">
 
         {{-- Logo e identidad --}}
-        <div class="rounded-xl border p-6 flex flex-col gap-5" style="background-color:#ffffff; border-color:#c3c6d6;">
+        <div id="identidad" class="rounded-xl border p-6 flex flex-col gap-5" style="background-color:#ffffff; border-color:#c3c6d6;">
             <h2 class="text-base font-semibold" style="color:#191c1e;">Logo e identidad</h2>
 
             <div class="flex flex-col md:flex-row gap-6">
@@ -96,7 +96,7 @@
         </div>
 
         {{-- Descripción --}}
-        <div class="rounded-xl border p-6 flex flex-col gap-4" style="background-color:#ffffff; border-color:#c3c6d6;">
+        <div id="descripcion" class="rounded-xl border p-6 flex flex-col gap-4" style="background-color:#ffffff; border-color:#c3c6d6;">
             <h2 class="text-base font-semibold" style="color:#191c1e;">Descripción</h2>
             <div class="flex flex-col gap-1">
                 <label class="text-xs font-semibold" style="color:#434654;">Sobre la empresa</label>
@@ -106,7 +106,7 @@
         </div>
 
         {{-- Contacto y ubicación --}}
-        <div class="rounded-xl border p-6 flex flex-col gap-5" style="background-color:#ffffff; border-color:#c3c6d6;">
+        <div id="contacto" class="rounded-xl border p-6 flex flex-col gap-5" style="background-color:#ffffff; border-color:#c3c6d6;">
             <h2 class="text-base font-semibold" style="color:#191c1e;">Contacto y ubicación</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

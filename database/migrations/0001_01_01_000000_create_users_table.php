@@ -20,12 +20,12 @@ return new class extends Migration
             $table->string('role')->default('candidate');
             $table->string('status')->default('active');
 
-            # Optional fields for first and last name
+            // Optional fields for first and last name
             $table->string('first_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('phone')->nullable();
 
-            # timestamps for tracking user activity
+            // timestamps for tracking user activity
             $table->timestamp('last_seen_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
