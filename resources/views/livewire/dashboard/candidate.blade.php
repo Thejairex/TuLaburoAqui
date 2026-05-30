@@ -194,18 +194,19 @@
         </a>
 
         {{-- Buscar Ofertas --}}
-        <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 opacity-60">
-            <div class="w-10 h-10 rounded-lg bg-lm-surface-highest flex items-center justify-center">
-                <span class="material-symbols-outlined text-xl leading-none text-lm-secondary">search</span>
+        <a href="{{ route('jobs.search') }}" wire:navigate
+           class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 hover:shadow-sm transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-lm-secondary-container flex items-center justify-center">
+                <span class="material-symbols-outlined text-xl leading-none text-lm-primary">search</span>
             </div>
             <div>
                 <p class="text-sm font-bold text-lm-on-surface">Buscar Ofertas</p>
                 <p class="text-xs mt-0.5 text-lm-outline">Explorá trabajos que se ajusten a tu perfil</p>
             </div>
-            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">
-                Próximamente
+            <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-secondary-container text-lm-primary">
+                Explorar
             </span>
-        </div>
+        </a>
 
         {{-- Mis Postulaciones --}}
         <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 opacity-60">

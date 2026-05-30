@@ -20,6 +20,11 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.company.show');
+        $jobs = $this->company->jobPosts()
+            ->published()
+            ->latest('published_at')
+            ->get();
+
+        return view('livewire.company.show', compact('jobs'));
     }
 }

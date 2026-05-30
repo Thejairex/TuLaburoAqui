@@ -40,12 +40,27 @@
                    ])>
                     Mi Empresa
                 </a>
+
+                <a href="{{ route('company.jobs.index') }}" wire:navigate
+                   @class([
+                       'flex items-center px-4 h-full text-sm font-semibold transition-colors border-b-2',
+                       'border-lm-primary text-lm-primary' => request()->routeIs('company.jobs.*'),
+                       'border-transparent text-lm-on-surface-variant hover:text-lm-on-surface' => ! request()->routeIs('company.jobs.*'),
+                   ])>
+                    Mis Ofertas
+                </a>
             @endif
 
-            <span class="flex items-center gap-1.5 px-4 h-full text-sm font-semibold text-lm-outline cursor-not-allowed select-none opacity-40 border-b-2 border-transparent">
-                Buscar Ofertas
-                <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-lm-surface-highest text-lm-secondary">Pronto</span>
-            </span>
+            @if(auth()->user()?->role === 'candidate')
+                <a href="{{ route('jobs.search') }}" wire:navigate
+                   @class([
+                       'flex items-center px-4 h-full text-sm font-semibold transition-colors border-b-2',
+                       'border-lm-primary text-lm-primary' => request()->routeIs('jobs.*'),
+                       'border-transparent text-lm-on-surface-variant hover:text-lm-on-surface' => ! request()->routeIs('jobs.*'),
+                   ])>
+                    Buscar Ofertas
+                </a>
+            @endif
 
             @if(auth()->user()?->role === 'candidate')
                 <span class="flex items-center gap-1.5 px-4 h-full text-sm font-semibold text-lm-outline cursor-not-allowed select-none opacity-40 border-b-2 border-transparent">
@@ -155,6 +170,16 @@
                 <span class="material-symbols-outlined text-[18px] leading-none">person</span>
                 Mi Perfil
             </a>
+
+            <a href="{{ route('jobs.search') }}" wire:navigate @click="mobileOpen = false"
+               @class([
+                   'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors',
+                   'text-lm-primary bg-lm-secondary-container' => request()->routeIs('jobs.*'),
+                   'text-lm-on-surface-variant hover:bg-lm-surface-low hover:text-lm-on-surface' => ! request()->routeIs('jobs.*'),
+               ])>
+                <span class="material-symbols-outlined text-[18px] leading-none">search</span>
+                Buscar Ofertas
+            </a>
         @endif
 
         @if(auth()->user()?->role === 'employer')
@@ -166,6 +191,16 @@
                ])>
                 <span class="material-symbols-outlined text-[18px] leading-none">business</span>
                 Mi Empresa
+            </a>
+
+            <a href="{{ route('company.jobs.index') }}" wire:navigate @click="mobileOpen = false"
+               @class([
+                   'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors',
+                   'text-lm-primary bg-lm-secondary-container' => request()->routeIs('company.jobs.*'),
+                   'text-lm-on-surface-variant hover:bg-lm-surface-low hover:text-lm-on-surface' => ! request()->routeIs('company.jobs.*'),
+               ])>
+                <span class="material-symbols-outlined text-[18px] leading-none">work</span>
+                Mis Ofertas
             </a>
         @endif
 

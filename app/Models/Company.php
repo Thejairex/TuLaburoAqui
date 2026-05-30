@@ -41,6 +41,11 @@ class Company extends Model implements HasMedia
         return $this->hasOne(CompanyMember::class)->where('is_owner', true);
     }
 
+    public function jobPosts()
+    {
+        return $this->hasMany(JobPost::class);
+    }
+
     public function logoUrl(): ?string
     {
         return $this->getFirstMediaUrl('company_logo') ?: null;

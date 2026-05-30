@@ -126,12 +126,16 @@ El roadmap completo está en `docs/roadmap-mvp-tulaburoaqui.md`. Siempre consult
 | 1 | Registro y acceso | ✅ Completa |
 | 2 | Perfiles y archivos | ✅ Completa |
 | 3 | Dashboards por rol | ✅ Completa |
-| 4 | Ofertas y búsqueda | ⏳ En curso |
-| 5 | Match y mensajería | ⏳ Pendiente |
+| 4 | Ofertas y búsqueda | ✅ Completa |
+| 5 | Match y mensajería | ⏳ En curso |
 | 6 | Calificaciones y administración | ⏳ Pendiente |
 
-### Fase actual: 4 — Ofertas y búsqueda
-Próximo paso: CRUD de ofertas laborales para empresa (estados draft/published/paused/closed/expired) y buscador con filtros reactivos en Livewire.
+### Fase actual: 5 — Match y mensajería
+Próximo paso: postulaciones (`job_applications`) desde el buscador/detalle de oferta, estados de postulación, `match_score` básico por overlap de skills, y mensajería simple.
+
+Fase 4 cerrada:
+- **Paso 1 — CRUD de ofertas (empresa).** Estados `draft/published/paused/closed/expired` (helpers `statusLabel()`/`statusColor()` en `JobPost`); relación `skills()` vía `job_post_skills` (pivot `JobPostSkill`, columnas `required`/`priority`); lógica en `app/Services/JobPostService.php` (create/update/changeStatus); validación en `JobPostValidationRules`; gestión en `app/Livewire/Company/Jobs/` (Index + Form) bajo rutas `mis-ofertas*` (`company.jobs.*`, `role:employer`). Integrado en navbar y dashboard de empresa.
+- **Paso 2 — Buscador público + vista de oferta.** `app/Livewire/Jobs/Search.php` (filtros reactivos con `#[Url]`: keyword, ciudad, salario, contrato, modalidad, seniority + orden + paginación; scope `JobPost::published()`) y `Jobs/Show.php` (detalle público, 404 si no está publicada). Rutas públicas `ofertas` (`jobs.search`) y `ofertas/{jobPost}` (`jobs.show`). Listado de ofertas publicadas integrado en el perfil público de empresa (`company/show`), navbar y dashboard del candidato ("Buscar Ofertas").
 
 Fase 3 cerrada: dashboards de candidato y empresa con progreso de completitud, checklist de acciones pendientes (CTA con deep-link a secciones del editor) y accesos rápidos (edición, carga de archivos, ofertas, postulaciones y mensajería según rol). Lógica de completitud en `WorkerProfileCompleteness` y `CompanyCompleteness` (app/Services).
 

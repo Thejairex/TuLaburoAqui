@@ -79,13 +79,31 @@
         </div>
     @endif
 
-    {{-- Placeholder de ofertas (Fase 4) --}}
+    {{-- Ofertas activas --}}
     <div class="rounded-xl border p-6" style="background-color:#ffffff; border-color:#c3c6d6;">
-        <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center justify-between mb-4">
             <h2 class="text-base font-semibold" style="color:#191c1e;">Ofertas activas</h2>
-            <span class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background-color:#e1e2e4; color:#526069;">Próximamente</span>
+            <span class="text-xs font-semibold px-2 py-0.5 rounded-full" style="background-color:#d3e2ed; color:#003d9b;">
+                {{ $jobs->count() }}
+            </span>
         </div>
-        <p class="text-sm" style="color:#737685;">Las ofertas laborales de esta empresa aparecerán acá.</p>
+
+        @forelse ($jobs as $job)
+            <a href="{{ route('jobs.show', $job) }}" wire:navigate
+               class="flex items-center justify-between gap-3 p-3 rounded-lg border mb-2 last:mb-0 transition-colors hover:bg-[#f3f4f6]"
+               style="border-color:#e1e2e4;">
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold truncate" style="color:#191c1e;">{{ $job->title }}</p>
+                    <p class="text-xs mt-0.5" style="color:#737685;">
+                        @if ($job->work_modality){{ ['remote'=>'Remoto','on-site'=>'Presencial','hybrid'=>'Híbrido'][$job->work_modality] ?? $job->work_modality }}@endif
+                        @if ($job->city) · {{ $job->city }}@endif
+                    </p>
+                </div>
+                <span class="material-symbols-outlined shrink-0" style="color:#003d9b;">chevron_right</span>
+            </a>
+        @empty
+            <p class="text-sm" style="color:#737685;">Esta empresa no tiene ofertas publicadas por el momento.</p>
+        @endforelse
     </div>
 
 </div>

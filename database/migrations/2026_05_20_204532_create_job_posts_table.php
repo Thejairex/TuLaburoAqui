@@ -29,11 +29,14 @@ return new class extends Migration
             $table->boolean('salary_visible')->default(false);
             $table->integer('vacancies')->default(1);
             $table->boolean('is_featured')->default(false);
-            $table->string('status')->default('open'); // Enum: open, closed, paused
+            $table->string('status')->default('draft'); // Enum: draft, published, paused, closed, expired
 
-            $table->timestamp('published_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('published_at')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();
+
+            $table->index(['status', 'published_at']);
+            $table->index(['city', 'province']);
         });
     }
 
