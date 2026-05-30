@@ -8,7 +8,34 @@ RUN npm ci --no-audit --no-fund
 COPY . .
 RUN npm run build
 
-FROM composer:2 AS composer-builder
+FROM php:8.4-cli-alpine AS php-base
+
+RUN apk add --no-cache \
+    postgresql-dev \
+    libpng-dev \
+    libwebp-dev \
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev \
+    oniguruma-dev \
+    linux-headers \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    pdo_sqlite \
+    mbstring \
+    xml \
+    bcmath \
+    gd \
+    zip \
+    exif \
+    && rm -rf /var/cache/apk/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+FROM php-base AS composer-builder
 
 WORKDIR /app
 
@@ -52,6 +79,7 @@ RUN apk add --no-cache \
     bcmath \
     gd \
     zip \
+    exif \
     opcache \
     && rm -rf /var/cache/apk/*
 
