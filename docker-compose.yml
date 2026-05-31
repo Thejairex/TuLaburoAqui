@@ -1,0 +1,66 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tulaburoaqui-app
+    volumes:
+      - app_storage:/var/www/html/storage/app/public
+      - app_database:/var/www/html/database
+    restart: unless-stopped
+    privileged: true
+    env_file:
+      - .env
+    networks:
+      - proxy
+    environment:
+      PHP_UPLOAD_MAX_FILESIZE: 50M
+      PHP_POST_MAX_SIZE: 50M
+    healthcheck:
+      test: [ "CMD", "php", "-v" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  nginx:
+    image: nginx:alpine
+    container_name: tulaburoaqui-nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    volumes_from:
+      - app:ro
+    ports:
+      - "8100:80"
+    networks:
+      - proxy
+    depends_on:
+      app:
+        condition: service_started
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tulaburoaqui-queue
+    volumes:
+      - app_storage:/var/www/html/storage/app/public
+      - app_database:/var/www/html/database
+    restart: unless-stopped
+    privileged: true
+    env_file:
+      - .env
+    networks:
+      - proxy
+    command: [ "php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600" ]
+    depends_on:
+      app:
+        condition: service_started
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  app_storage:
+  app_database:
