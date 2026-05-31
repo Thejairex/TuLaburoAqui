@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: laborMarket-app
-    container_name: laborMarket-app
+    image: labormarket-app
+    container_name: labormarket-app
     restart: unless-stopped
     volumes:
       - sqlite_data:/app/database
@@ -51,7 +51,7 @@ services:
       - proxy
 
   queue:
-    image: laborMarket-app
+    image: labormarket-app
     build:
       context: .
       dockerfile: Dockerfile
