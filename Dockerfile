@@ -1,12 +1,9 @@
-FROM node:22-alpine AS node-builder
+FROM node:22-alpine AS node-deps
 
 WORKDIR /app
 
 COPY package.json package-lock.json .npmrc ./
 RUN npm ci --no-audit --no-fund
-
-COPY . .
-RUN npm run build
 
 FROM php:8.4-cli-alpine AS php-base
 
@@ -55,6 +52,18 @@ RUN composer install \
     --prefer-dist \
     --optimize-autoloader
 
+FROM node:22-alpine AS asset-builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci --no-audit --no-fund
+
+COPY --from=composer-builder /app /app
+COPY . .
+
+RUN npm run build
+
 FROM php:8.4-fpm-alpine
 
 RUN apk add --no-cache \
@@ -84,7 +93,7 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 COPY --from=composer-builder /app /app
-COPY --from=node-builder /app/public/build /app/public/build
+COPY --from=asset-builder /app/public/build /app/public/build
 
 WORKDIR /app
 
