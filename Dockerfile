@@ -1,15 +1,4 @@
-# ─── Stage 1: Build frontend assets ──────────────────────────────────────────
-FROM node:22-alpine AS node-builder
-
-WORKDIR /app
-
-COPY package.json package-lock.json .npmrc ./
-RUN npm ci --no-audit --no-fund
-
-COPY . .
-RUN npm run build
-
-# ─── Stage 2: Install PHP dependencies ───────────────────────────────────────
+# ─── Stage 1: Install PHP dependencies (vendor/ needed by Vite) ───────────────
 FROM composer:2 AS composer-builder
 
 WORKDIR /app
@@ -30,6 +19,20 @@ RUN composer install \
     --prefer-dist \
     --optimize-autoloader \
     --ignore-platform-reqs
+
+# ─── Stage 2: Build frontend assets (needs vendor/ from composer) ─────────────
+FROM node:22-alpine AS node-builder
+
+WORKDIR /app
+
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci --no-audit --no-fund
+
+COPY . .
+# Copiar vendor/ desde composer-builder para que flux.css sea resolvible
+COPY --from=composer-builder /app/vendor ./vendor
+
+RUN npm run build
 
 # ─── Stage 3: Production image ────────────────────────────────────────────────
 FROM php:8.4-fpm-alpine
