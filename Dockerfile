@@ -37,10 +37,14 @@ RUN npm run build
 # ─── Stage 3: Production image ────────────────────────────────────────────────
 FROM php:8.4-fpm-alpine
 
-# Todas las libs de sistema necesarias para compilar las extensiones PHP
+# Build-time deps (autoconf/g++/make para PECL) + runtime libs de extensiones PHP
 RUN apk add --no-cache \
     bash \
     curl \
+    # build tools requeridos por pecl
+    autoconf \
+    g++ \
+    make \
     # pdo_pgsql
     postgresql-dev \
     # gd
@@ -58,7 +62,7 @@ RUN apk add --no-cache \
     libexif-dev \
     # pdo_sqlite
     sqlite-dev \
-    # ext-xml, ext-dom, ext-simplexml
+    # ext-xml
     libxml2-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install \
@@ -73,10 +77,9 @@ RUN apk add --no-cache \
         opcache \
         pcntl \
         exif \
-    && rm -rf /var/cache/apk/*
-
-# Extensión Redis vía PECL (necesaria para REDIS_CLIENT=phpredis)
-RUN pecl install redis && docker-php-ext-enable redis
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && rm -rf /tmp/pear /var/cache/apk/*
 
 COPY --from=composer-builder /app /app
 COPY --from=node-builder /app/public/build /app/public/build
