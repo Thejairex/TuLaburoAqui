@@ -37,22 +37,30 @@ RUN npm run build
 # ─── Stage 3: Production image ────────────────────────────────────────────────
 FROM php:8.4-fpm-alpine
 
+# Todas las libs de sistema necesarias para compilar las extensiones PHP
 RUN apk add --no-cache \
     bash \
     curl \
+    # pdo_pgsql
     postgresql-dev \
+    # gd
     libpng-dev \
     libwebp-dev \
     libjpeg-turbo-dev \
     freetype-dev \
+    # zip
     libzip-dev \
+    # mbstring
     oniguruma-dev \
+    # pcntl / build headers
     linux-headers \
+    # exif (spatie/medialibrary)
     libexif-dev \
+    # pdo_sqlite
+    sqlite-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install \
         pdo \
-        pdo_mysql \
         pdo_pgsql \
         pdo_sqlite \
         mbstring \
