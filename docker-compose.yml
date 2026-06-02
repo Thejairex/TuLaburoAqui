@@ -1,13 +1,13 @@
 services:
 
-  # Laravel + PHP-FPM ──────────────────────────────────────────────────────────
+  # Laravel + PHP-FPM
   app:
     build:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
     expose:
-      - "8100"
+      - "9000"
     environment:
       APP_NAME: "TuLaburoAqui"
       APP_ENV: production
@@ -39,7 +39,7 @@ services:
     networks:
       - proxy
 
-  # Nginx: único punto de entrada público ─────────────────────────────────────
+  # Nginx: único punto de entrada público
   nginx:
     image: nginx:1.27-alpine
     restart: unless-stopped
