@@ -20,14 +20,16 @@ RUN composer install \
     --no-interaction \
     --no-scripts \
     --no-autoloader \
-    --prefer-dist
+    --prefer-dist \
+    --ignore-platform-reqs
 
 COPY . .
 RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --ignore-platform-reqs
 
 # ─── Stage 3: Production image ────────────────────────────────────────────────
 FROM php:8.4-fpm-alpine
@@ -56,6 +58,7 @@ RUN apk add --no-cache \
         zip \
         opcache \
         pcntl \
+        exif \
     && rm -rf /var/cache/apk/*
 
 # Extensión Redis vía PECL (necesaria para REDIS_CLIENT=phpredis)
