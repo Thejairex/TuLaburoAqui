@@ -48,6 +48,7 @@ RUN apk add --no-cache \
     libzip-dev \
     oniguruma-dev \
     linux-headers \
+    libexif-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install \
         pdo \
