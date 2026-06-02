@@ -58,6 +58,8 @@ RUN apk add --no-cache \
     libexif-dev \
     # pdo_sqlite
     sqlite-dev \
+    # ext-xml, ext-dom, ext-simplexml
+    libxml2-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install \
         pdo \
