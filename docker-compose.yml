@@ -1,5 +1,44 @@
 services:
 
+  # Laravel + PHP-FPM ──────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    expose:
+      - "8100"
+    environment:
+      APP_NAME: "TuLaburoAqui"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: "${APP_KEY}"
+      APP_URL: "${APP_URL:-http://localhost}"
+      DB_CONNECTION: pgsql
+      DB_HOST: "${DB_HOST}"
+      DB_PORT: "${DB_PORT:-5432}"
+      DB_DATABASE: "${DB_DATABASE:-tulaburo}"
+      DB_USERNAME: "${DB_USERNAME:-tulaburo}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      REDIS_CLIENT: "${REDIS_CLIENT:-array}"
+      CACHE_STORE: "${CACHE_STORE:-file}"
+      SESSION_DRIVER: "${SESSION_DRIVER:-file}"
+      QUEUE_CONNECTION: "${QUEUE_CONNECTION:-sync}"
+      FILESYSTEM_DISK: local
+      LOG_CHANNEL: stderr
+      LOG_LEVEL: error
+    volumes:
+      - app_storage:/app/storage
+      - app_public:/app/public
+    healthcheck:
+      test: ["CMD", "php", "-r", "echo 'ok';"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    networks:
+      - proxy
+
   # Nginx: único punto de entrada público ─────────────────────────────────────
   nginx:
     image: nginx:1.27-alpine
@@ -13,170 +52,12 @@ services:
       app:
         condition: service_healthy
     networks:
-      - tulaburo
-
-  # Laravel + PHP-FPM ──────────────────────────────────────────────────────────
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    expose:
-      - "8100"   # ← Solo visible para nginx, NO para el host
-    environment:
-      APP_NAME: "TuLaburoAqui"
-      APP_ENV: production
-      APP_DEBUG: "false"
-      APP_KEY: "${APP_KEY}"
-      APP_URL: "${APP_URL:-http://localhost}"
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: "${DB_DATABASE:-tulaburo}"
-      DB_USERNAME: "${DB_USERNAME:-tulaburo}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      REDIS_CLIENT: phpredis
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
-      CACHE_STORE: redis
-      SESSION_DRIVER: redis
-      QUEUE_CONNECTION: redis
-      FILESYSTEM_DISK: local
-      LOG_CHANNEL: stderr
-      LOG_LEVEL: error
-    volumes:
-      - app_storage:/app/storage
-      - app_public:/app/public
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "php", "artisan", "health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 60s
-    networks:
-      - tulaburo
-
-  # Queue Worker ────────────────────────────────────────────────────────────────
-  worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
-    environment:
-      APP_ENV: production
-      APP_KEY: "${APP_KEY}"
-      APP_URL: "${APP_URL:-http://localhost}"
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: "${DB_DATABASE:-tulaburo}"
-      DB_USERNAME: "${DB_USERNAME:-tulaburo}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      REDIS_CLIENT: phpredis
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
-      CACHE_STORE: redis
-      SESSION_DRIVER: redis
-      QUEUE_CONNECTION: redis
-      LOG_CHANNEL: stderr
-    volumes:
-      - app_storage:/app/storage
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - tulaburo
-
-  # Scheduler (cron de Laravel) ────────────────────────────────────────────────
-  scheduler:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    restart: unless-stopped
-    command: ["php", "artisan", "schedule:work"]
-    environment:
-      APP_ENV: production
-      APP_KEY: "${APP_KEY}"
-      APP_URL: "${APP_URL:-http://localhost}"
-      DB_CONNECTION: pgsql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_DATABASE: "${DB_DATABASE:-tulaburo}"
-      DB_USERNAME: "${DB_USERNAME:-tulaburo}"
-      DB_PASSWORD: "${DB_PASSWORD}"
-      REDIS_CLIENT: phpredis
-      REDIS_HOST: redis
-      REDIS_PORT: 6379
-      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
-      CACHE_STORE: redis
-      SESSION_DRIVER: redis
-      QUEUE_CONNECTION: redis
-      LOG_CHANNEL: stderr
-    volumes:
-      - app_storage:/app/storage
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - tulaburo
-
-  # PostgreSQL ──────────────────────────────────────────────────────────────────
-  db:
-    image: postgres:17-alpine
-    restart: unless-stopped
-    environment:
-      POSTGRES_DB: "${DB_DATABASE:-tulaburo}"
-      POSTGRES_USER: "${DB_USERNAME:-tulaburo}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-tulaburo} -d ${DB_DATABASE:-tulaburo}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - tulaburo
-    # Sin 'ports:' → PostgreSQL NO es accesible desde internet
-
-  # Redis ───────────────────────────────────────────────────────────────────────
-  redis:
-    image: redis:7-alpine
-    restart: unless-stopped
-    command: >
-      redis-server
-      --requirepass "${REDIS_PASSWORD:-}"
-      --maxmemory 256mb
-      --maxmemory-policy allkeys-lru
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD:-}", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    networks:
-      - tulaburo
-    # Sin 'ports:' → Redis NO es accesible desde internet
+      - proxy
 
 volumes:
-  db_data:
-  redis_data:
   app_storage:
   app_public:
 
 networks:
-  tulaburo:
-    driver: bridge
+  proxy:
+    external: true
