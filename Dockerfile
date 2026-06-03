@@ -101,10 +101,7 @@ RUN ln -sf /app/storage/app/public /app/public/storage
 COPY docker/start-container.sh /usr/local/bin/start-container
 RUN chmod +x /usr/local/bin/start-container
 
-# Cambiar PHP-FPM para escuchar en puerto 8100
-RUN sed -i 's/listen = 127.0.0.1:9000/listen = 0.0.0.0:8100/' /usr/local/etc/php-fpm.d/www.conf \
-    || sed -i 's/listen = 9000/listen = 0.0.0.0:8100/' /usr/local/etc/php-fpm.d/www.conf
-
-EXPOSE 8100
+# PHP-FPM escucha en 9000 (default, no se modifica)
+EXPOSE 9000
 
 ENTRYPOINT ["start-container"]
