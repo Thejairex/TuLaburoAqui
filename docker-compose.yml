@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     expose:
-      - "9000"
+      - "8100"
     environment:
       APP_NAME: "TuLaburoAqui"
       APP_ENV: production
