@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-# ─── Esperar DB ───────────────────────────────────────────────────────────────
+# ─── Esperar DB ─────────────────────────────────────────────────────────────────────────────
 if [ -n "$DB_HOST" ]; then
     echo "Waiting for database at $DB_HOST:${DB_PORT:-5432}..."
     until php -r "new PDO('pgsql:host=$DB_HOST;port=${DB_PORT:-5432};dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD');" 2>/dev/null; do
@@ -10,11 +10,12 @@ if [ -n "$DB_HOST" ]; then
     echo "Database is ready."
 fi
 
-# ─── Laravel bootstrap ────────────────────────────────────────────────────────
+# ─── Laravel bootstrap ────────────────────────────────────────────────────────────────────────
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
+php artisan migrate --force
 php artisan storage:link --force 2>/dev/null || true
 
-# ─── Iniciar PHP-FPM ──────────────────────────────────────────────────────────
-exec php-fpm
+# ─── Iniciar supervisor (nginx + php-fpm) ───────────────────────────────────────────────
+exec supervisord -c /etc/supervisor/conf.d/supervisord.conf
