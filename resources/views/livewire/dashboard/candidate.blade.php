@@ -80,32 +80,34 @@
                 </a>
 
                 {{-- Mis Postulaciones --}}
-                <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 opacity-60">
-                    <div class="w-10 h-10 rounded-lg bg-lm-surface-highest flex items-center justify-center">
-                        <span class="material-symbols-outlined text-xl leading-none text-lm-secondary">work</span>
+                <a href="{{ route('applications.index') }}" wire:navigate
+                   class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 hover:shadow-sm transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-lm-secondary-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-xl leading-none text-lm-primary">work</span>
                     </div>
                     <div>
                         <p class="text-sm font-bold text-lm-on-surface">Mis Postulaciones</p>
                         <p class="text-xs mt-0.5 text-lm-outline">Seguí el estado de cada oferta aplicada</p>
                     </div>
-                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">
-                        Próximamente
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-secondary-container text-lm-primary">
+                        Ver postulaciones
                     </span>
-                </div>
+                </a>
 
                 {{-- Mensajes --}}
-                <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 opacity-60">
-                    <div class="w-10 h-10 rounded-lg bg-lm-surface-highest flex items-center justify-center">
-                        <span class="material-symbols-outlined text-xl leading-none text-lm-secondary">chat</span>
+                <a href="{{ route('conversations.index') }}" wire:navigate
+                   class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 hover:shadow-sm transition-shadow">
+                    <div class="w-10 h-10 rounded-lg bg-lm-secondary-container flex items-center justify-center">
+                        <span class="material-symbols-outlined text-xl leading-none text-lm-primary">chat</span>
                     </div>
                     <div>
                         <p class="text-sm font-bold text-lm-on-surface">Mensajes</p>
                         <p class="text-xs mt-0.5 text-lm-outline">Conversaciones con las empresas</p>
                     </div>
-                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">
-                        Próximamente
+                    <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-secondary-container text-lm-primary">
+                        Ver mensajes
                     </span>
-                </div>
+                </a>
 
             </div>
         </div>

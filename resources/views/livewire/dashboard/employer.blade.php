@@ -34,27 +34,41 @@
 
     {{-- Métricas --}}
     <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        @php
-            $metrics = [
-                ['label' => 'Ofertas Activas',  'value' => (string) $publishedCount, 'note' => 'Publicadas', 'icon' => 'work'],
-                ['label' => 'Postulaciones',    'value' => '—', 'note' => 'Próximamente', 'icon' => 'description'],
-                ['label' => 'Contactados',      'value' => '—', 'note' => 'Próximamente', 'icon' => 'mail'],
-                ['label' => 'Entrevistas',      'value' => '—', 'note' => 'Próximamente', 'icon' => 'calendar_today'],
-            ];
-        @endphp
-
-        @foreach ($metrics as $metric)
-            <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-2">
-                <div class="flex items-center justify-between text-lm-secondary">
-                    <span class="text-xs font-semibold">{{ $metric['label'] }}</span>
-                    <span class="material-symbols-outlined text-xl leading-none">{{ $metric['icon'] }}</span>
-                </div>
-                <div class="text-3xl font-bold text-lm-primary">{{ $metric['value'] }}</div>
-                <div class="text-xs font-semibold px-2 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">
-                    {{ $metric['note'] }}
-                </div>
+        <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-2">
+            <div class="flex items-center justify-between text-lm-secondary">
+                <span class="text-xs font-semibold">Ofertas Activas</span>
+                <span class="material-symbols-outlined text-xl leading-none">work</span>
             </div>
-        @endforeach
+            <div class="text-3xl font-bold text-lm-primary">{{ $publishedCount }}</div>
+            <div class="text-xs font-semibold px-2 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">Publicadas</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-2">
+            <div class="flex items-center justify-between text-lm-secondary">
+                <span class="text-xs font-semibold">Postulaciones</span>
+                <span class="material-symbols-outlined text-xl leading-none">description</span>
+            </div>
+            <div class="text-3xl font-bold text-lm-primary">{{ $applicationCount }}</div>
+            <div class="text-xs font-semibold px-2 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">Recibidas</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-2">
+            <div class="flex items-center justify-between text-lm-secondary">
+                <span class="text-xs font-semibold">Contactados</span>
+                <span class="material-symbols-outlined text-xl leading-none">mail</span>
+            </div>
+            <div class="text-3xl font-bold text-lm-primary">{{ $contactedCount }}</div>
+            <div class="text-xs font-semibold px-2 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">En chat</div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-2">
+            <div class="flex items-center justify-between text-lm-secondary">
+                <span class="text-xs font-semibold">Entrevistas</span>
+                <span class="material-symbols-outlined text-xl leading-none">calendar_today</span>
+            </div>
+            <div class="text-3xl font-bold text-lm-primary">—</div>
+            <div class="text-xs font-semibold px-2 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">Próximamente</div>
+        </div>
     </section>
 
     {{-- Cuerpo principal: checklist + accesos rápidos --}}
@@ -196,11 +210,14 @@
 
                 @forelse ($recentJobs as $job)
                     @php $color = $job->statusColor(); @endphp
-                    <a href="{{ route('company.jobs.edit', $job) }}" wire:navigate
+                    <a href="{{ route('company.jobs.applicants', $job) }}" wire:navigate
                        class="flex items-center justify-between gap-3 p-3 rounded-lg border border-lm-surface-highest hover:bg-lm-surface-low transition-colors">
                         <div class="min-w-0">
                             <p class="text-sm font-semibold text-lm-on-surface truncate">{{ $job->title }}</p>
-                            <p class="text-xs text-lm-outline">{{ $job->vacancies }} {{ $job->vacancies === 1 ? 'vacante' : 'vacantes' }}</p>
+                            <p class="text-xs text-lm-outline">
+                                {{ $job->vacancies }} {{ $job->vacancies === 1 ? 'vacante' : 'vacantes' }}
+                                · {{ $job->applications_count }} {{ $job->applications_count === 1 ? 'candidato' : 'candidatos' }}
+                            </p>
                         </div>
                         <span class="text-[11px] font-bold px-2 py-0.5 rounded-full shrink-0"
                               style="background-color:{{ $color['bg'] }}; color:{{ $color['text'] }};">
@@ -283,27 +300,33 @@
                 </span>
             </a>
 
-            <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 opacity-50">
-                <div class="w-10 h-10 rounded-lg bg-lm-surface-highest flex items-center justify-center">
-                    <span class="material-symbols-outlined text-xl leading-none text-lm-secondary">group</span>
+            <a href="{{ route('company.jobs.index') }}" wire:navigate
+               class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 hover:shadow-sm transition-shadow">
+                <div class="w-10 h-10 rounded-lg bg-lm-secondary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-xl leading-none text-lm-primary">group</span>
                 </div>
                 <div>
                     <p class="text-sm font-bold text-lm-on-surface">Candidatos</p>
                     <p class="text-xs mt-0.5 text-lm-outline">Revisá postulaciones a tus ofertas</p>
                 </div>
-                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">Próximamente</span>
-            </div>
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-secondary-container text-lm-primary">
+                    Ver ofertas
+                </span>
+            </a>
 
-            <div class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 opacity-50">
-                <div class="w-10 h-10 rounded-lg bg-lm-surface-highest flex items-center justify-center">
-                    <span class="material-symbols-outlined text-xl leading-none text-lm-secondary">chat</span>
+            <a href="{{ route('conversations.index') }}" wire:navigate
+               class="bg-white rounded-xl border border-lm-outline-variant px-5 py-5 flex flex-col gap-3 hover:shadow-sm transition-shadow">
+                <div class="w-10 h-10 rounded-lg bg-lm-secondary-container flex items-center justify-center">
+                    <span class="material-symbols-outlined text-xl leading-none text-lm-primary">chat</span>
                 </div>
                 <div>
                     <p class="text-sm font-bold text-lm-on-surface">Mensajes</p>
                     <p class="text-xs mt-0.5 text-lm-outline">Conversaciones con candidatos</p>
                 </div>
-                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-surface-highest text-lm-secondary">Próximamente</span>
-            </div>
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full w-fit bg-lm-secondary-container text-lm-primary">
+                    Ver mensajes
+                </span>
+            </a>
         </div>
     </div>
 

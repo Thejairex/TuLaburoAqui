@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Applications\Index as ApplicationsIndex;
+use App\Livewire\Company\Jobs\Applicants as CompanyJobApplicants;
 use App\Livewire\Company\Jobs\Form as JobForm;
 use App\Livewire\Company\Jobs\Index as JobIndex;
 use App\Livewire\Company\Show;
@@ -7,6 +9,8 @@ use App\Livewire\Dashboard\Candidate;
 use App\Livewire\Dashboard\Employer;
 use App\Livewire\Jobs\Search as JobSearch;
 use App\Livewire\Jobs\Show as JobShow;
+use App\Livewire\Messages\Index as MessagesIndex;
+use App\Livewire\Messages\Show as MessagesShow;
 use App\Livewire\Profile\Edit;
 use App\Models\JobPost;
 use Illuminate\Support\Facades\Route;
@@ -50,10 +54,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->middleware('role:employer')
         ->name('company.edit');
 
+    Route::get('postulaciones', ApplicationsIndex::class)
+        ->middleware('role:candidate')
+        ->name('applications.index');
+
+    Route::get('mensajes', MessagesIndex::class)
+        ->name('conversations.index');
+    Route::get('mensajes/{conversation}', MessagesShow::class)
+        ->name('conversations.show');
+
     Route::middleware('role:employer')->group(function () {
         Route::get('mis-ofertas', JobIndex::class)->name('company.jobs.index');
         Route::get('mis-ofertas/nueva', JobForm::class)->name('company.jobs.create');
         Route::get('mis-ofertas/{jobPost}/editar', JobForm::class)->name('company.jobs.edit');
+        Route::get('mis-ofertas/{jobPost}/candidatos', CompanyJobApplicants::class)->name('company.jobs.applicants');
     });
 });
 

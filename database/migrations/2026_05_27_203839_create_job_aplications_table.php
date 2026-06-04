@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->foreignUuid('job_post_id')->constrained('job_posts')->onDelete('cascade');
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('status')->default('pending');
+            $table->string('status')->default('submitted');
             $table->text('cover_letter')->nullable();
             $table->string('source')->nullable();
             $table->decimal('match_score', 10, 2)->nullable();
@@ -23,6 +23,9 @@ return new class extends Migration
             $table->timestamp('reviewed_at')->nullable();
             $table->timestamp('hired_at')->nullable();
             $table->timestamps();
+
+            $table->unique(['job_post_id', 'user_id']);
+            $table->index(['user_id', 'status']);
         });
     }
 

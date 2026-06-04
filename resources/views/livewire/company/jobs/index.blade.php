@@ -38,6 +38,8 @@
                     <span>{{ $job->vacancies }} {{ $job->vacancies === 1 ? 'vacante' : 'vacantes' }}</span>
                     <span>·</span>
                     <span>{{ $job->skills_count }} {{ $job->skills_count === 1 ? 'skill' : 'skills' }}</span>
+                    <span>·</span>
+                    <span>{{ $job->applications_count }} {{ $job->applications_count === 1 ? 'candidato' : 'candidatos' }}</span>
                 </p>
             </div>
 
@@ -69,6 +71,11 @@
                 <a href="{{ route('company.jobs.edit', $job) }}" wire:navigate
                    class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-lm-secondary-container text-lm-primary hover:opacity-80 transition-opacity">
                     Editar
+                </a>
+
+                <a href="{{ route('company.jobs.applicants', $job) }}" wire:navigate
+                   class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-lm-primary text-lm-primary hover:bg-lm-secondary-container transition-colors">
+                    Candidatos
                 </a>
 
                 <button wire:click="delete('{{ $job->id }}')"

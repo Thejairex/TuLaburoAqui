@@ -50,6 +50,11 @@ class JobPost extends Model
         ];
     }
 
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
     public function company()
     {
         return $this->belongsTo(Company::class);

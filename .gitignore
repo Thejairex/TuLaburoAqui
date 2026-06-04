@@ -22,5 +22,7 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
-.agents/
+.agents/*
 .claude/
+graphify-out/
+.opencode/

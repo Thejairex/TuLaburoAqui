@@ -55,7 +55,7 @@ class Index extends Component
 
         $jobs = JobPost::query()
             ->forCompany($company->id)
-            ->withCount('skills')
+            ->withCount(['skills', 'applications'])
             ->latest()
             ->get();
 

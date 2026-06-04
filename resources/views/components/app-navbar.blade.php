@@ -63,18 +63,24 @@
             @endif
 
             @if(auth()->user()?->role === 'candidate')
-                <span class="flex items-center gap-1.5 px-4 h-full text-sm font-semibold text-lm-outline cursor-not-allowed select-none opacity-40 border-b-2 border-transparent">
+                <a href="{{ route('applications.index') }}" wire:navigate
+                   @class([
+                       'flex items-center px-4 h-full text-sm font-semibold transition-colors border-b-2',
+                       'border-lm-primary text-lm-primary' => request()->routeIs('applications.*'),
+                       'border-transparent text-lm-on-surface-variant hover:text-lm-on-surface' => ! request()->routeIs('applications.*'),
+                   ])>
                     Postulaciones
-                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-lm-surface-highest text-lm-secondary">Pronto</span>
-                </span>
+                </a>
             @endif
 
-            @if(auth()->user()?->role === 'employer')
-                <span class="flex items-center gap-1.5 px-4 h-full text-sm font-semibold text-lm-outline cursor-not-allowed select-none opacity-40 border-b-2 border-transparent">
-                    Candidatos
-                    <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-lm-surface-highest text-lm-secondary">Pronto</span>
-                </span>
-            @endif
+            <a href="{{ route('conversations.index') }}" wire:navigate
+               @class([
+                   'flex items-center px-4 h-full text-sm font-semibold transition-colors border-b-2',
+                   'border-lm-primary text-lm-primary' => request()->routeIs('conversations.*'),
+                   'border-transparent text-lm-on-surface-variant hover:text-lm-on-surface' => ! request()->routeIs('conversations.*'),
+               ])>
+                Mensajes
+            </a>
         </nav>
 
         {{-- Derecha: avatar + dropdown (desktop) + burger (mobile) --}}
@@ -161,6 +167,16 @@
         </a>
 
         @if(auth()->user()?->role === 'candidate')
+            <a href="{{ route('applications.index') }}" wire:navigate @click="mobileOpen = false"
+               @class([
+                   'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors',
+                   'text-lm-primary bg-lm-secondary-container' => request()->routeIs('applications.*'),
+                   'text-lm-on-surface-variant hover:bg-lm-surface-low hover:text-lm-on-surface' => ! request()->routeIs('applications.*'),
+               ])>
+                <span class="material-symbols-outlined text-[18px] leading-none">work</span>
+                Postulaciones
+            </a>
+
             <a href="{{ route('profile.edit.candidate') }}" wire:navigate @click="mobileOpen = false"
                @class([
                    'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors',
@@ -181,6 +197,16 @@
                 Buscar Ofertas
             </a>
         @endif
+
+        <a href="{{ route('conversations.index') }}" wire:navigate @click="mobileOpen = false"
+           @class([
+               'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors',
+               'text-lm-primary bg-lm-secondary-container' => request()->routeIs('conversations.*'),
+               'text-lm-on-surface-variant hover:bg-lm-surface-low hover:text-lm-on-surface' => ! request()->routeIs('conversations.*'),
+           ])>
+            <span class="material-symbols-outlined text-[18px] leading-none">chat</span>
+            Mensajes
+        </a>
 
         @if(auth()->user()?->role === 'employer')
             <a href="{{ route('company.edit') }}" wire:navigate @click="mobileOpen = false"

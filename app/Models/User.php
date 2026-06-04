@@ -62,4 +62,16 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
     {
         return $this->hasMany(CompanyMember::class);
     }
+
+    public function jobApplications()
+    {
+        return $this->hasMany(JobApplication::class);
+    }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_participants')
+            ->withPivot('last_read_at')
+            ->withTimestamps();
+    }
 }

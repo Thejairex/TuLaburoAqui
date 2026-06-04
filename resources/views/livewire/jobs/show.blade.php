@@ -74,12 +74,49 @@
                     <span class="text-xs text-lm-outline">Salario estimado</span>
                 </div>
             @endif
-            <span class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white opacity-50 cursor-not-allowed"
-                  style="background-color:#003d9b;">
-                <span class="material-symbols-outlined text-[18px] leading-none">send</span>
-                Postularme
-            </span>
-            <span class="text-[11px] text-lm-outline text-center md:text-right">Postulación disponible pronto</span>
+
+            @auth
+                @if ($application)
+                    @php $color = $application->statusColor(); @endphp
+                    <div class="flex flex-col items-center md:items-end gap-2">
+                        <span class="text-xs font-semibold px-3 py-1.5 rounded-full"
+                              style="background-color:{{ $color['bg'] }}; color:{{ $color['text'] }};">
+                            {{ $application->statusLabel() }}
+                        </span>
+                        @if ($application->match_score > 0)
+                            <span class="text-xs text-lm-outline">Match {{ $application->match_score }}%</span>
+                        @endif
+                        @if ($application->conversation)
+                            <a href="{{ route('conversations.show', $application->conversation) }}" wire:navigate
+                               class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-lm-primary text-lm-primary hover:bg-lm-secondary-container transition-colors">
+                                <span class="material-symbols-outlined text-[14px] leading-none">chat</span>
+                                Ir al chat
+                            </a>
+                        @endif
+                    </div>
+                @elseif (auth()->user()->role === 'candidate')
+                    <button wire:click="openApplyModal"
+                            class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-80"
+                            style="background-color:#003d9b;">
+                        <span class="material-symbols-outlined text-[18px] leading-none">send</span>
+                        Postularme
+                    </button>
+                @else
+                    <span class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white opacity-50 cursor-not-allowed"
+                          style="background-color:#003d9b;">
+                        <span class="material-symbols-outlined text-[18px] leading-none">send</span>
+                        Postularme
+                    </span>
+                    <span class="text-[11px] text-lm-outline text-center md:text-right">Solo candidatos</span>
+                @endif
+            @else
+                <a href="{{ route('login') }}"
+                   class="flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-80"
+                   style="background-color:#003d9b;">
+                    <span class="material-symbols-outlined text-[18px] leading-none">send</span>
+                    Iniciar sesión para postularme
+                </a>
+            @endauth
         </div>
     </div>
 
@@ -129,6 +166,48 @@
                class="text-xs font-semibold px-4 py-2 rounded-lg border border-lm-primary text-lm-primary hover:bg-lm-secondary-container transition-colors whitespace-nowrap shrink-0">
                 Ver empresa
             </a>
+        </div>
+    @endif
+
+    {{-- Modal de postulación --}}
+    @if ($showApplyModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+             wire:click.self="$set('showApplyModal', false)">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 flex flex-col gap-5"
+                 wire:click.self.stop>
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-lm-on-surface">Postularte a {{ $jobPost->title }}</h2>
+                    <button wire:click="$set('showApplyModal', false)"
+                            class="p-1 rounded-lg text-lm-outline hover:bg-lm-surface-low transition-colors">
+                        <span class="material-symbols-outlined text-xl leading-none">close</span>
+                    </button>
+                </div>
+
+                <form wire:submit="submitApplication" class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label for="coverLetter" class="text-sm font-semibold text-lm-on-surface">
+                            Carta de presentación <span class="text-lm-outline font-normal">(opcional)</span>
+                        </label>
+                        <textarea id="coverLetter" wire:model="coverLetter" rows="5"
+                                  class="w-full rounded-lg border border-lm-outline-variant px-3 py-2.5 text-sm text-lm-on-surface placeholder:text-lm-outline resize-none focus:outline-none focus:ring-2 focus:ring-lm-primary/20 focus:border-lm-primary"
+                                  placeholder="Contale al empleador por qué sos el candidato ideal..."></textarea>
+                        @error('coverLetter') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3">
+                        <button type="button" wire:click="$set('showApplyModal', false)"
+                                class="text-sm font-semibold px-4 py-2 rounded-lg border border-lm-outline-variant text-lm-on-surface-variant hover:bg-lm-surface-low transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                                class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-80"
+                                style="background-color:#003d9b;">
+                            <span class="material-symbols-outlined text-[18px] leading-none">send</span>
+                            Enviar postulación
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     @endif
 </div>

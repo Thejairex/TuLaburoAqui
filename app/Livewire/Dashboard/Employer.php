@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\JobApplication;
 use App\Models\JobPost;
 use App\Services\CompanyCompleteness;
 use Illuminate\Support\Facades\Auth;
@@ -24,12 +25,28 @@ class Employer extends Component
         $pending = $company ? $service->pending($company) : [];
 
         $publishedCount = $company ? JobPost::forCompany($company->id)->published()->count() : 0;
+
+        $applicationCount = $company
+            ? JobApplication::forCompany($company->id)->count()
+            : 0;
+
+        $contactedCount = $company
+            ? JobApplication::forCompany($company->id)
+                ->whereHas('conversation')
+                ->count()
+            : 0;
+
         $recentJobs = $company
-            ? JobPost::forCompany($company->id)->latest()->take(5)->get()
+            ? JobPost::forCompany($company->id)
+                ->withCount('applications')
+                ->latest()
+                ->take(5)
+                ->get()
             : collect();
 
         return view('livewire.dashboard.employer', compact(
-            'company', 'percentage', 'items', 'pending', 'publishedCount', 'recentJobs'
+            'company', 'percentage', 'items', 'pending', 'publishedCount',
+            'applicationCount', 'contactedCount', 'recentJobs'
         ));
     }
 }
