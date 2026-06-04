@@ -38,7 +38,7 @@ services:
     networks:
       - proxy
 
-  # Nginx: único punto de entrada público (8100 externo → 80 interno)
+  # Nginx: accede al filesystem de app via volumes_from
   nginx:
     image: nginx:1.27-alpine
     restart: unless-stopped
@@ -46,6 +46,8 @@ services:
       - "8100:80"
     volumes:
       - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    volumes_from:
+      - app:ro
     depends_on:
       app:
         condition: service_healthy
