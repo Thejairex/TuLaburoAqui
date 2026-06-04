@@ -8,16 +8,26 @@ use App\Livewire\Dashboard\Employer;
 use App\Livewire\Jobs\Search as JobSearch;
 use App\Livewire\Jobs\Show as JobShow;
 use App\Livewire\Profile\Edit;
+use App\Models\JobPost;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('home');
+Route::get('/', function () {
+    $featuredJobs = JobPost::query()
+        ->published()
+        ->with('company')
+        ->latest('published_at')
+        ->limit(3)
+        ->get();
+
+    return view('welcome', compact('featuredJobs'));
+})->name('home');
 
 Route::get('ofertas', JobSearch::class)->name('jobs.search');
-Route::get('ofertas/{jobPost}', JobShow::class)->name('jobs.show');
 
 Route::get('empresa/{company}', Show::class)->name('company.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('ofertas/{jobPost}', JobShow::class)->name('jobs.show');
     Route::get('dashboard', function () {
         return match (auth()->user()->role) {
             'employer' => redirect()->route('dashboard.employer'),

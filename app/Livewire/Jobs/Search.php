@@ -72,9 +72,9 @@ class Search extends Component
                 $sub->where('salary_max', '>=', $this->salaryMin)
                     ->orWhere('salary_min', '>=', $this->salaryMin);
             }))
-            ->when($this->contractTypes, fn (Builder $q) => $q->whereIn('contract_type', $this->contractTypes))
-            ->when($this->modalities, fn (Builder $q) => $q->whereIn('work_modality', $this->modalities))
-            ->when($this->seniorities, fn (Builder $q) => $q->whereIn('seniority', $this->seniorities))
+            ->when(array_filter($this->contractTypes), fn (Builder $q) => $q->whereIn('contract_type', array_filter($this->contractTypes)))
+            ->when(array_filter($this->modalities), fn (Builder $q) => $q->whereIn('work_modality', array_filter($this->modalities)))
+            ->when(array_filter($this->seniorities), fn (Builder $q) => $q->whereIn('seniority', array_filter($this->seniorities)))
             ->when(
                 $this->sort === 'salary',
                 fn (Builder $q) => $q->orderByDesc('salary_max'),

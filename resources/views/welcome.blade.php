@@ -83,36 +83,40 @@
                 </p>
 
                 {{-- Buscador --}}
-                <div class="mt-10 bg-white p-3 rounded-xl border border-lm-outline-variant shadow-sm max-w-[900px] mx-auto flex flex-col md:flex-row gap-1 items-center">
+                <form method="GET" action="{{ route('jobs.search') }}"
+                      class="mt-10 bg-white p-3 rounded-xl border border-lm-outline-variant shadow-sm max-w-[900px] mx-auto flex flex-col md:flex-row gap-1 items-center">
                     <div class="flex items-center gap-2 px-3 w-full md:border-r border-lm-outline-variant">
                         <span class="material-symbols-outlined text-lm-outline text-xl">search</span>
-                        <input type="text" placeholder="¿Qué trabajo buscás?"
+                        <input type="text" name="q" placeholder="¿Qué trabajo buscás?"
                                class="w-full border-none focus:ring-0 text-sm bg-transparent placeholder:text-lm-outline">
                     </div>
                     <div class="flex items-center gap-2 px-3 w-full md:border-r border-lm-outline-variant">
                         <span class="material-symbols-outlined text-lm-outline text-xl">location_on</span>
-                        <input type="text" placeholder="Ubicación"
+                        <input type="text" name="lugar" placeholder="Ubicación"
                                class="w-full border-none focus:ring-0 text-sm bg-transparent placeholder:text-lm-outline">
                     </div>
                     <div class="flex items-center gap-2 px-3 w-full">
                         <span class="material-symbols-outlined text-lm-outline text-xl">schedule</span>
-                        <select class="w-full border-none focus:ring-0 text-sm bg-transparent text-lm-secondary">
-                            <option>Disponibilidad</option>
-                            <option>Tiempo Completo</option>
-                            <option>Medio Tiempo</option>
+                        <select name="contrato[]" class="w-full border-none focus:ring-0 text-sm bg-transparent text-lm-secondary">
+                            <option value="">Disponibilidad</option>
+                            <option value="full-time">Tiempo Completo</option>
+                            <option value="part-time">Medio Tiempo</option>
+                            <option value="contract">Contrato</option>
+                            <option value="freelance">Freelance</option>
                         </select>
                     </div>
-                    <button class="w-full md:w-auto px-16 py-3 bg-lm-primary text-lm-on-primary text-xs font-semibold tracking-wider uppercase rounded-lg hover:opacity-90 transition-all whitespace-nowrap">
+                    <button type="submit" class="w-full md:w-auto px-16 py-3 bg-lm-primary text-lm-on-primary text-xs font-semibold tracking-wider uppercase rounded-lg hover:opacity-90 transition-all whitespace-nowrap">
                         Buscar trabajo
                     </button>
-                </div>
+                </form>
 
                 {{-- Tags populares --}}
                 <div class="flex flex-wrap justify-center gap-2 mt-6">
                     @foreach(['Repartidor', 'Almacén', 'Atención al cliente', 'Limpieza', 'Seguridad'] as $tag)
-                        <span class="px-3 py-1 bg-lm-secondary-fixed text-lm-on-secondary-fixed-variant rounded-full text-xs font-semibold tracking-wider uppercase cursor-pointer hover:bg-lm-secondary-container transition-colors">
+                        <a href="{{ route('jobs.search', ['q' => $tag]) }}"
+                           class="px-3 py-1 bg-lm-secondary-fixed text-lm-on-secondary-fixed-variant rounded-full text-xs font-semibold tracking-wider uppercase hover:bg-lm-secondary-container transition-colors">
                             {{ $tag }}
-                        </span>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -123,94 +127,84 @@
             <div class="flex justify-between items-end mb-10">
                 <div>
                     <h2 class="text-xl font-semibold text-lm-on-surface">Ofertas destacadas</h2>
-                    <p class="text-sm text-lm-secondary">Basadas en tu ubicación y perfil</p>
+                    <p class="text-sm text-lm-secondary">Las últimas publicaciones disponibles</p>
                 </div>
-                <button class="text-lm-primary text-xs font-semibold tracking-wider uppercase hover:underline">
+                <a href="{{ route('jobs.search') }}"
+                   class="text-lm-primary text-xs font-semibold tracking-wider uppercase hover:underline">
                     Ver todas las ofertas
-                </button>
+                </a>
             </div>
 
+            @php
+                $categoryEmoji = [
+                    'Tecnología'    => '💻',
+                    'Logística'     => '🚚',
+                    'Ventas'        => '🛒',
+                    'Construcción'  => '🏗️',
+                    'Administración'=> '📋',
+                    'Retail'        => '🏪',
+                ];
+                $modalityIcon = [
+                    'remote'  => ['icon' => 'home_work',    'label' => 'Trabajo remoto'],
+                    'on-site' => ['icon' => 'location_on',  'label' => 'Presencial'],
+                    'hybrid'  => ['icon' => 'sync_alt',     'label' => 'Modalidad híbrida'],
+                ];
+                $seniorityIcon = [
+                    'junior' => ['icon' => 'school',             'label' => 'Junior'],
+                    'mid'    => ['icon' => 'verified',            'label' => 'Semi Senior'],
+                    'senior' => ['icon' => 'workspace_premium',   'label' => 'Senior'],
+                    'lead'   => ['icon' => 'military_tech',       'label' => 'Lead'],
+                ];
+            @endphp
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {{-- Tarjeta 1 --}}
-                <div class="bg-white p-6 rounded-xl border border-lm-outline-variant hover:shadow-md transition-all group cursor-pointer"
-                     style="transition: transform 0.2s ease, box-shadow 0.2s ease;"
-                     onmouseenter="this.style.transform='translateY(-4px)'"
-                     onmouseleave="this.style.transform='translateY(0)'">
-                    <div class="flex justify-between items-start mb-3">
-                        <div class="h-12 w-12 bg-lm-surface-container rounded-lg flex items-center justify-center text-2xl">
-                            🏭
+                @forelse ($featuredJobs as $job)
+                    @php
+                        $emoji    = $categoryEmoji[$job->category] ?? '💼';
+                        $modality = $modalityIcon[$job->work_modality] ?? null;
+                        $seniority= $seniorityIcon[$job->seniority] ?? null;
+                        $badge    = $modality ?? $seniority ?? ['icon' => 'work', 'label' => 'Oferta activa'];
+                        $company  = $job->company?->display_name ?? $job->company?->legal_name ?? '—';
+                    @endphp
+                    <a href="{{ route('jobs.show', $job) }}"
+                       class="bg-white p-6 rounded-xl border border-lm-outline-variant hover:shadow-md transition-all group cursor-pointer block"
+                       style="transition: transform 0.2s ease, box-shadow 0.2s ease;"
+                       onmouseenter="this.style.transform='translateY(-4px)'"
+                       onmouseleave="this.style.transform='translateY(0)'">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="h-12 w-12 bg-lm-surface-container rounded-lg flex items-center justify-center text-2xl">
+                                {{ $emoji }}
+                            </div>
+                            @if ($job->salary_visible && $job->salary_min)
+                                <span class="text-lm-on-tertiary-fixed-variant text-xs font-semibold tracking-wider bg-lm-tertiary-fixed px-3 py-1 rounded-full">
+                                    ${{ number_format($job->salary_min, 0, ',', '.') }} / mes
+                                </span>
+                            @else
+                                <span class="text-lm-secondary text-xs font-semibold tracking-wider bg-lm-surface-highest px-3 py-1 rounded-full">
+                                    A convenir
+                                </span>
+                            @endif
                         </div>
-                        <span class="text-lm-on-tertiary-fixed-variant text-xs font-semibold tracking-wider bg-lm-tertiary-fixed px-3 py-1 rounded-full">
-                            $25,000 / mes
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-lm-on-surface group-hover:text-lm-primary transition-colors">
-                        Supervisor de Almacén
-                    </h3>
-                    <p class="text-sm text-lm-secondary mb-6">LogiTech Solutions • CABA</p>
-                    <div class="flex gap-2 mb-6">
-                        <span class="material-symbols-outlined text-lm-outline text-[18px]">verified</span>
-                        <span class="text-xs font-semibold tracking-wider uppercase text-lm-outline">Empresa verificada</span>
-                    </div>
-                    <div class="flex justify-between items-center pt-6 border-t border-lm-outline-variant">
-                        <span class="text-xs font-semibold text-lm-secondary">Publicado hace 2h</span>
-                        <button class="text-xs font-bold text-lm-primary hover:underline">Postularse</button>
-                    </div>
-                </div>
-
-                {{-- Tarjeta 2 --}}
-                <div class="bg-white p-6 rounded-xl border border-lm-outline-variant hover:shadow-md transition-all group cursor-pointer"
-                     onmouseenter="this.style.transform='translateY(-4px)'"
-                     onmouseleave="this.style.transform='translateY(0)'"
-                     style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                    <div class="flex justify-between items-start mb-3">
-                        <div class="h-12 w-12 bg-lm-surface-container rounded-lg flex items-center justify-center text-2xl">
-                            🛒
+                        <h3 class="text-xl font-semibold text-lm-on-surface group-hover:text-lm-primary transition-colors">
+                            {{ $job->title }}
+                        </h3>
+                        <p class="text-sm text-lm-secondary mb-6">
+                            {{ $company }}@if($job->city) • {{ $job->city }}@endif
+                        </p>
+                        <div class="flex gap-2 mb-6">
+                            <span class="material-symbols-outlined text-lm-outline text-[18px]">{{ $badge['icon'] }}</span>
+                            <span class="text-xs font-semibold tracking-wider uppercase text-lm-outline">{{ $badge['label'] }}</span>
                         </div>
-                        <span class="text-lm-on-tertiary-fixed-variant text-xs font-semibold tracking-wider bg-lm-tertiary-fixed px-3 py-1 rounded-full">
-                            $12,500 / mes
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-lm-on-surface group-hover:text-lm-primary transition-colors">
-                        Cajero de Turno
-                    </h3>
-                    <p class="text-sm text-lm-secondary mb-6">Mercado Premium • Córdoba</p>
-                    <div class="flex gap-2 mb-6">
-                        <span class="material-symbols-outlined text-lm-outline text-[18px]">history</span>
-                        <span class="text-xs font-semibold tracking-wider uppercase text-lm-outline">Urgente</span>
-                    </div>
-                    <div class="flex justify-between items-center pt-6 border-t border-lm-outline-variant">
-                        <span class="text-xs font-semibold text-lm-secondary">Publicado hace 5h</span>
-                        <button class="text-xs font-bold text-lm-primary hover:underline">Postularse</button>
-                    </div>
-                </div>
-
-                {{-- Tarjeta 3 --}}
-                <div class="bg-white p-6 rounded-xl border border-lm-outline-variant hover:shadow-md transition-all group cursor-pointer"
-                     onmouseenter="this.style.transform='translateY(-4px)'"
-                     onmouseleave="this.style.transform='translateY(0)'"
-                     style="transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                    <div class="flex justify-between items-start mb-3">
-                        <div class="h-12 w-12 bg-lm-surface-container rounded-lg flex items-center justify-center text-2xl">
-                            ⚡
+                        <div class="flex justify-between items-center pt-6 border-t border-lm-outline-variant">
+                            <span class="text-xs font-semibold text-lm-secondary">
+                                {{ $job->published_at?->diffForHumans() ?? 'Reciente' }}
+                            </span>
+                            <span class="text-xs font-bold text-lm-primary group-hover:underline">Ver oferta</span>
                         </div>
-                        <span class="text-lm-on-tertiary-fixed-variant text-xs font-semibold tracking-wider bg-lm-tertiary-fixed px-3 py-1 rounded-full">
-                            $18,000 / mes
-                        </span>
-                    </div>
-                    <h3 class="text-xl font-semibold text-lm-on-surface group-hover:text-lm-primary transition-colors">
-                        Técnico Eléctrico
-                    </h3>
-                    <p class="text-sm text-lm-secondary mb-6">Servicios Industriales • Rosario</p>
-                    <div class="flex gap-2 mb-6">
-                        <span class="material-symbols-outlined text-lm-outline text-[18px]">workspace_premium</span>
-                        <span class="text-xs font-semibold tracking-wider uppercase text-lm-outline">Certificación requerida</span>
-                    </div>
-                    <div class="flex justify-between items-center pt-6 border-t border-lm-outline-variant">
-                        <span class="text-xs font-semibold text-lm-secondary">Publicado ayer</span>
-                        <button class="text-xs font-bold text-lm-primary hover:underline">Postularse</button>
-                    </div>
-                </div>
+                    </a>
+                @empty
+                    <p class="col-span-3 text-sm text-center text-lm-outline py-8">No hay ofertas publicadas por el momento.</p>
+                @endforelse
             </div>
         </section>
 
