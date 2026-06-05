@@ -74,4 +74,19 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
             ->withPivot('last_read_at')
             ->withTimestamps();
     }
+
+    public function reviewsGiven()
+    {
+        return $this->hasMany(Review::class, 'reviewer_user_id');
+    }
+
+    public function reviewsReceived()
+    {
+        return $this->hasMany(Review::class, 'reviewed_user_id');
+    }
+
+    public function averageRating(): ?float
+    {
+        return $this->reviewsReceived()->visible()->avg('rating');
+    }
 }

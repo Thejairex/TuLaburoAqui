@@ -112,7 +112,7 @@ Usar `$model->addMedia($file)->toMediaCollection('collection')` y `$model->getFi
 | 2 Perfiles y archivos | ✅ |
 | 3 Dashboards por rol | ✅ |
 | 4 Ofertas y búsqueda | ✅ |
-| 5 Match y mensajería | ⏳ En curso |
+| 5 Match y mensajería | ✅ |
 | 6 Calificaciones y admin | ⏳ Pendiente |
 
 Ver `docs/roadmap-mvp-tulaburoaqui.md` para criterios de done.

@@ -9,7 +9,6 @@
         @php $color = $application->statusColor(); @endphp
         <div class="bg-white rounded-xl border border-lm-outline-variant px-6 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-start gap-4 min-w-0 flex-1">
-                {{-- Logo empresa --}}
                 <div class="w-12 h-12 rounded-xl border border-lm-surface-highest bg-lm-surface-low flex items-center justify-center shrink-0 overflow-hidden">
                     @if ($application->jobPost?->company?->logoUrl())
                         <img src="{{ $application->jobPost->company->logoUrl() }}" alt="" class="w-full h-full object-cover">
@@ -43,6 +42,9 @@
                             Match {{ $application->match_score }}%
                         </span>
                     @endif
+                    @if (in_array($application->status, ['hired', 'rejected']) && ! in_array($application->id, $userReviewIds))
+                        <span class="text-xs text-lm-secondary ml-2">· Pendiente de calificar</span>
+                    @endif
                 </div>
             </div>
 
@@ -53,6 +55,13 @@
                         <span class="material-symbols-outlined text-[14px] leading-none">chat</span>
                         Chat
                     </a>
+                @endif
+                @if (in_array($application->status, ['hired', 'rejected']) && ! in_array($application->id, $userReviewIds))
+                    <button wire:click="openReviewModal('{{ $application->id }}')"
+                            class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-lm-outline-variant text-lm-on-surface-variant hover:bg-lm-secondary-container hover:text-lm-primary transition-colors">
+                        <span class="material-symbols-outlined text-[14px] leading-none align-middle">star</span>
+                        Calificar empresa
+                    </button>
                 @endif
                 @if ($application->status !== 'withdrawn')
                     <button wire:click="withdraw('{{ $application->id }}')"
@@ -79,4 +88,57 @@
         </div>
     @endforelse
 
+    {{-- Modal calificar empresa --}}
+    @if ($showReviewModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4"
+             wire:click.self="$set('showReviewModal', false)">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6 flex flex-col gap-5"
+                 wire:click.self.stop>
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-bold text-lm-on-surface">Calificar empresa</h2>
+                    <button wire:click="$set('showReviewModal', false)"
+                            class="p-1 rounded-lg text-lm-outline hover:bg-lm-surface-low transition-colors">
+                        <span class="material-symbols-outlined text-xl leading-none">close</span>
+                    </button>
+                </div>
+
+                <form wire:submit="submitReview" class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-semibold text-lm-on-surface">Puntuación</label>
+                        <div class="flex gap-1">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <button type="button" wire:click="$set('reviewRating', {{ $i }})"
+                                        class="text-2xl transition-colors hover:scale-110">
+                                    <span class="{{ $i <= $reviewRating ? 'text-yellow-400' : 'text-lm-surface-highest' }}">★</span>
+                                </button>
+                            @endfor
+                        </div>
+                        @error('reviewRating') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label for="reviewComment" class="text-sm font-semibold text-lm-on-surface">
+                            Comentario <span class="text-lm-outline font-normal">(opcional)</span>
+                        </label>
+                        <textarea id="reviewComment" wire:model="reviewComment" rows="3"
+                                  class="w-full rounded-lg border border-lm-outline-variant px-3 py-2.5 text-sm text-lm-on-surface placeholder:text-lm-outline resize-none focus:outline-none focus:ring-2 focus:ring-lm-primary/20 focus:border-lm-primary"
+                                  placeholder="Compartí tu experiencia con esta empresa..."></textarea>
+                        @error('reviewComment') <span class="text-xs text-red-600">{{ $message }}</span> @enderror
+                    </div>
+
+                    <div class="flex items-center justify-end gap-3">
+                        <button type="button" wire:click="$set('showReviewModal', false)"
+                                class="text-sm font-semibold px-4 py-2 rounded-lg border border-lm-outline-variant text-lm-on-surface-variant hover:bg-lm-surface-low transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                                class="flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-80"
+                                style="background-color:#003d9b;">
+                            Enviar calificación
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endif
 </div>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,14 +20,15 @@ class Review extends Model
 {
     use HasUuids;
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'is_visible' => 'boolean',
-    ];
+    public const TYPES = ['employer_to_candidate', 'candidate_to_employer'];
+
+    protected function casts(): array
+    {
+        return [
+            'is_visible' => 'boolean',
+            'rating' => 'integer',
+        ];
+    }
 
     public function jobApplication()
     {
@@ -41,5 +43,25 @@ class Review extends Model
     public function reviewed()
     {
         return $this->belongsTo(User::class, 'reviewed_user_id');
+    }
+
+    public function scopeVisible(Builder $query): Builder
+    {
+        return $query->where('is_visible', true);
+    }
+
+    public function scopeOfType(Builder $query, string $type): Builder
+    {
+        return $query->where('review_type', $type);
+    }
+
+    public function scopeFromReviewer(Builder $query, string $userId): Builder
+    {
+        return $query->where('reviewer_user_id', $userId);
+    }
+
+    public function scopeToReviewed(Builder $query, string $userId): Builder
+    {
+        return $query->where('reviewed_user_id', $userId);
     }
 }

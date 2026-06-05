@@ -26,3 +26,5 @@ yarn-error.log
 .claude/
 graphify-out/
 .opencode/
+.graphify_report_highlights.py
+.graphify_update_detect.py

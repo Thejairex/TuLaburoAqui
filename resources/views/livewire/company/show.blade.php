@@ -22,6 +22,12 @@
             </div>
 
             <div class="flex flex-wrap gap-2 mt-1">
+                @if ($company->ratings_count > 0 && $company->avg_rating)
+                    <span class="text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1" style="background-color:#fef9c3; color:#854d0e;">
+                        <span class="material-symbols-outlined text-xs">star</span>
+                        {{ number_format($company->avg_rating, 1) }} ({{ $company->ratings_count }})
+                    </span>
+                @endif
                 @if ($company->industry)
                     <span class="text-xs font-semibold px-2.5 py-1 rounded-full" style="background-color:#d3e2ed; color:#003d9b;">
                         {{ $company->industry }}

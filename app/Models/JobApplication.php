@@ -51,6 +51,11 @@ class JobApplication extends Model
         return $this->hasOne(Conversation::class);
     }
 
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function scopeForCandidate(Builder $query, string $userId): Builder
     {
         return $query->where('user_id', $userId);

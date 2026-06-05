@@ -127,11 +127,17 @@ El roadmap completo está en `docs/roadmap-mvp-tulaburoaqui.md`. Siempre consult
 | 2 | Perfiles y archivos | ✅ Completa |
 | 3 | Dashboards por rol | ✅ Completa |
 | 4 | Ofertas y búsqueda | ✅ Completa |
-| 5 | Match y mensajería | ⏳ En curso |
+| 5 | Match y mensajería | ✅ Completa |
 | 6 | Calificaciones y administración | ⏳ Pendiente |
 
-### Fase actual: 5 — Match y mensajería
-Próximo paso: postulaciones (`job_applications`) desde el buscador/detalle de oferta, estados de postulación, `match_score` básico por overlap de skills, y mensajería simple.
+### Fase actual: 6 — Calificaciones y administración
+Próximo paso: reviews/calificaciones post-contratación, panel admin con gestión de usuarios, empresas, moderación y estadísticas base del MVP.
+
+Fase 5 cerrada:
+- **Paso 1 — Postulaciones y match.** `JobApplicationService` (apply/changeStatus/matchScore); modal de postulación en `Jobs/Show` con `cover_letter` opcional; cálculo automático de `match_score` por overlap de skills oferta vs candidato; estados `submitted/in_review/shortlisted/rejected/hired/withdrawn` con helpers `statusLabel()`/`statusColor()`.
+- **Paso 2 — Vistas de seguimiento.** `Applications/Index` (`role:candidate`) lista postulaciones con estado, match %, link a chat y acción "Retirar". `Company/Jobs/Applicants` (`role:employer`) lista postulantes por oferta con avatar, headline, match %, acciones de cambio de estado contextuales y botón "Iniciar/Ir al chat".
+- **Paso 3 — Mensajería interna.** `ConversationService` (startForApplication idempotente, sendMessage, markRead). `Messages/Index` bandeja con badge de no leídos, último mensaje, avatar del otro participante. `Messages/Show` hilo cronológico con `wire:poll` cada 5s, auto-markRead al abrir.
+- **Integración.** Navbar con links reales a Postulaciones (candidato) y Mensajes (ambos roles). Dashboards con métricas reales de postulaciones y contactados. Jobs Index con conteo de candidatos + enlace "Candidatos".
 
 Fase 4 cerrada:
 - **Paso 1 — CRUD de ofertas (empresa).** Estados `draft/published/paused/closed/expired` (helpers `statusLabel()`/`statusColor()` en `JobPost`); relación `skills()` vía `job_post_skills` (pivot `JobPostSkill`, columnas `required`/`priority`); lógica en `app/Services/JobPostService.php` (create/update/changeStatus); validación en `JobPostValidationRules`; gestión en `app/Livewire/Company/Jobs/` (Index + Form) bajo rutas `mis-ofertas*` (`company.jobs.*`, `role:employer`). Integrado en navbar y dashboard de empresa.

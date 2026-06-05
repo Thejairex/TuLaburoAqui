@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Admin\Dashboard;
+use App\Livewire\Admin\Users\Index;
 use App\Livewire\Applications\Index as ApplicationsIndex;
 use App\Livewire\Company\Jobs\Applicants as CompanyJobApplicants;
 use App\Livewire\Company\Jobs\Form as JobForm;
@@ -35,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return match (auth()->user()->role) {
             'employer' => redirect()->route('dashboard.employer'),
+            'admin' => redirect()->route('admin.dashboard'),
             default => redirect()->route('dashboard.candidate'),
         };
     })->name('dashboard');
@@ -68,6 +71,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('mis-ofertas/nueva', JobForm::class)->name('company.jobs.create');
         Route::get('mis-ofertas/{jobPost}/editar', JobForm::class)->name('company.jobs.edit');
         Route::get('mis-ofertas/{jobPost}/candidatos', CompanyJobApplicants::class)->name('company.jobs.applicants');
+    });
+
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', Dashboard::class)->name('dashboard');
+        Route::get('/usuarios', Index::class)->name('users.index');
+        Route::get('/empresas', App\Livewire\Admin\Companies\Index::class)->name('companies.index');
+        Route::get('/ofertas', App\Livewire\Admin\JobPosts\Index::class)->name('job-posts.index');
+        Route::get('/reviews', App\Livewire\Admin\Reviews\Index::class)->name('reviews.index');
     });
 });
 

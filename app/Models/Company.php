@@ -56,6 +56,15 @@ class Company extends Model implements HasMedia
         return app(CompanyCompleteness::class)->percentage($this);
     }
 
+    public function ratingBadge(): string
+    {
+        if ($this->ratings_count > 0 && $this->avg_rating) {
+            return number_format($this->avg_rating, 1).' ★';
+        }
+
+        return '';
+    }
+
     public static function generateUniqueSlug(string $name, ?string $excludeId = null): string
     {
         $base = Str::slug($name);

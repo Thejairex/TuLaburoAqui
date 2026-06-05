@@ -81,6 +81,18 @@
                ])>
                 Mensajes
             </a>
+
+            @if(auth()->user()?->role === 'admin')
+                <a href="{{ route('admin.dashboard') }}" wire:navigate
+                   @class([
+                       'flex items-center px-4 h-full text-sm font-semibold transition-colors border-b-2',
+                       'border-lm-primary text-lm-primary' => request()->routeIs('admin.*'),
+                       'border-transparent text-lm-on-surface-variant hover:text-lm-on-surface' => ! request()->routeIs('admin.*'),
+                   ])>
+                    <span class="material-symbols-outlined text-[18px] leading-none mr-1">shield</span>
+                    Admin
+                </a>
+            @endif
         </nav>
 
         {{-- Derecha: avatar + dropdown (desktop) + burger (mobile) --}}
@@ -207,6 +219,18 @@
             <span class="material-symbols-outlined text-[18px] leading-none">chat</span>
             Mensajes
         </a>
+
+        @if(auth()->user()?->role === 'admin')
+            <a href="{{ route('admin.dashboard') }}" wire:navigate @click="mobileOpen = false"
+               @class([
+                   'flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors',
+                   'text-lm-primary bg-lm-secondary-container' => request()->routeIs('admin.*'),
+                   'text-lm-on-surface-variant hover:bg-lm-surface-low hover:text-lm-on-surface' => ! request()->routeIs('admin.*'),
+               ])>
+                <span class="material-symbols-outlined text-[18px] leading-none">shield</span>
+                Admin
+            </a>
+        @endif
 
         @if(auth()->user()?->role === 'employer')
             <a href="{{ route('company.edit') }}" wire:navigate @click="mobileOpen = false"
